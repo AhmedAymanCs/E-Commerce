@@ -28,9 +28,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: StringManager.appName,
         theme: AppTheme.lightTheme,
-        home: const Scaffold(body: Center(child: Text('Firebase Connected!'))),
-        // initialRoute: Routes.homeRoute,
-        // onGenerateRoute: AppRouter.generateRoute,
+        initialRoute: Routes.homeRoute,
+        onGenerateRoute: AppRouter.generateRoute,
       ),
     );
   }
