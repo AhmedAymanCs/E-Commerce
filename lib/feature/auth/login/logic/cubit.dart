@@ -4,11 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(LoginInitialState());
 
-  LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
+  static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
   bool passwordVisible = false;
+  bool rememberMe = false;
 
   void changePasswordVisible() {
     passwordVisible = !passwordVisible;
     emit(ChangePasswordVisibleState());
+  }
+
+  void changeRememberMe() {
+    rememberMe = !rememberMe;
+    emit(ChangeRememberMeState());
   }
 }
