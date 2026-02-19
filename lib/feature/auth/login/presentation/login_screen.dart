@@ -1,7 +1,3 @@
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/constants/color_manager.dart';
-import 'package:e_commerce/core/constants/font_manager.dart';
-import 'package:e_commerce/core/constants/image_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/widgets/custom_button.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
@@ -11,7 +7,6 @@ import 'package:e_commerce/feature/auth/login/presentation/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -57,7 +52,7 @@ class LoginPage extends StatelessWidget {
                       return RememberMeAndForgotPassRow(
                         rememberMeValue: cubit.rememberMe,
                         checkBoxOnPressed: (_) => cubit.changeRememberMe(),
-                        ForgotPassOnPressed: () {},
+                        forgotPassOnPressed: () {},
                       );
                     },
                   ),

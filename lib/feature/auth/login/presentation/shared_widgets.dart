@@ -33,12 +33,12 @@ class LogoWithText extends StatelessWidget {
 class RememberMeAndForgotPassRow extends StatelessWidget {
   final bool rememberMeValue;
   final Function(bool?) checkBoxOnPressed;
-  final Function() ForgotPassOnPressed;
+  final Function() forgotPassOnPressed;
   const RememberMeAndForgotPassRow({
     super.key,
     required this.rememberMeValue,
     required this.checkBoxOnPressed,
-    required this.ForgotPassOnPressed,
+    required this.forgotPassOnPressed,
   });
 
   @override
@@ -54,7 +54,7 @@ class RememberMeAndForgotPassRow extends StatelessWidget {
         Text(StringManager.rememberMe),
         Spacer(),
         TextButton(
-          onPressed: ForgotPassOnPressed,
+          onPressed: forgotPassOnPressed,
           child: Text(StringManager.forgotPassword),
         ),
       ],
