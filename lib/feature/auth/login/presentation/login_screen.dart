@@ -61,7 +61,9 @@ class LoginPage extends StatelessWidget {
                       );
                     },
                   ),
+                  SizedBox(height: 20.h),
                   CustomButton(text: StringManager.login, onPressed: () {}),
+                  SizedBox(height: 20.h),
                   RegisterRow(),
                 ],
               ),
