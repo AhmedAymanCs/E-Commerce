@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: StringManager.appName,
         theme: AppTheme.lightTheme,
-        initialRoute: Routes.homeRoute,
+        initialRoute: Routes.loginRoute,
         onGenerateRoute: AppRouter.generateRoute,
       ),
     );
