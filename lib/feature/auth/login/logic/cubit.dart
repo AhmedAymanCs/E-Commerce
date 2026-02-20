@@ -5,11 +5,11 @@ class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(LoginInitialState());
 
   static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
-  bool passwordVisible = false;
+  bool passwordObscure = true;
   bool rememberMe = false;
 
   void changePasswordVisible() {
-    passwordVisible = !passwordVisible;
+    passwordObscure = !passwordObscure;
     emit(ChangePasswordVisibleState());
   }
 

@@ -8,8 +8,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +44,6 @@ class LoginPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const LogoWithText(),
                   SizedBox(height: 20.h),
@@ -41,7 +62,7 @@ class LoginPage extends StatelessWidget {
                         hint: StringManager.passwordHint,
                         title: StringManager.password,
                         preicon: Icons.lock_outlined,
-                        obscure: cubit.passwordVisible,
+                        obscure: cubit.passwordObscure,
                         onPressed: cubit.changePasswordVisible,
                       );
                     },
@@ -59,7 +80,11 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 20.h),
                   CustomButton(text: StringManager.login, onPressed: () {}),
                   SizedBox(height: 20.h),
-                  RegisterRow(),
+                  RegisterRow(
+                    onPressed: () {
+                      //TODO: navigate to register page
+                    },
+                  ),
                 ],
               ),
             ),
