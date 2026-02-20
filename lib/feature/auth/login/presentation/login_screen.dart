@@ -105,6 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     child: BlocBuilder<LoginCubit, LoginStates>(
+                      buildWhen: (previous, current) {
+                        return current is LoginLoadingState ||
+                            current is LoginErrorState;
+                      },
                       builder: (context, state) {
                         LoginCubit cubit = LoginCubit.get(context);
                         if (state is LoginLoadingState) {
