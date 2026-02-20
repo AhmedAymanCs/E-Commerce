@@ -1,6 +1,7 @@
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/auth/login/presentation/login_screen.dart';
 import 'package:e_commerce/feature/home/presentation/home_screen.dart';
+import 'package:e_commerce/feature/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -8,7 +9,8 @@ class AppRouter {
     switch (settings.name) {
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomePage());
-
+      case Routes.splashRoute:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       default:

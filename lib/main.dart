@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: StringManager.appName,
         theme: AppTheme.lightTheme,
-        initialRoute: Routes.loginRoute,
+        initialRoute: Routes.splashRoute,
         onGenerateRoute: AppRouter.generateRoute,
       ),
     );
