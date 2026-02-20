@@ -27,6 +27,7 @@ class LoginCubit extends Cubit<LoginStates> {
     final userCredential = await _authRepository.login(
       email: email,
       password: password,
+      rememberMe: rememberMe,
     );
     userCredential.fold(
       (r) => emit(LoginErrorState(r)),

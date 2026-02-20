@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
@@ -13,6 +12,7 @@ abstract class AuthRepository {
   ServerResponse<UserModel> login({
     required String email,
     required String password,
+    bool rememberMe = false,
   });
 }
 
@@ -24,13 +24,14 @@ class AuthRepositoryImpl implements AuthRepository {
   ServerResponse<UserModel> login({
     required String email,
     required String password,
+    bool rememberMe = false,
   }) async {
     try {
       final userCredential = await _authRemoteDataSource.login(
         email: email,
         password: password,
       );
-      if (userCredential.user != null) {
+      if (userCredential.user != null && rememberMe) {
         final userModel = UserModel.fromFirebaseUser(userCredential.user!);
         String sessionData = jsonEncode(userModel.toJson());
         await getIt<SecureStorageHelper>().saveData(
