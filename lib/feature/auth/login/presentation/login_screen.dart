@@ -1,4 +1,3 @@
-import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/routing/routes.dart';
