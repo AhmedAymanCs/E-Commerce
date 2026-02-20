@@ -28,9 +28,9 @@ class LoginCubit extends Cubit<LoginStates> {
       email: email,
       password: password,
     );
-    userCredential.fold((r) {
-      print('error: $r');
-      emit(LoginErrorState(r));
-    }, (l) => emit(LoginSuccessState(l)));
+    userCredential.fold(
+      (r) => emit(LoginErrorState(r)),
+      (l) => emit(LoginSuccessState(l)),
+    );
   }
 }

@@ -15,5 +15,8 @@ class AppTheme {
         textStyle: TextStyle(fontWeight: FontWeightManager.medium),
       ),
     ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: ColorManager.primaryColor,
+    ),
   );
 }
