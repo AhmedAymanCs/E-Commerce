@@ -63,7 +63,8 @@ class RememberMeAndForgotPassRow extends StatelessWidget {
 }
 
 class RegisterRow extends StatelessWidget {
-  const RegisterRow({super.key});
+  final VoidCallback? onPressed;
+  const RegisterRow({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class RegisterRow extends StatelessWidget {
             padding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
           ),
-          onPressed: () {},
+          onPressed: onPressed,
           child: Text(StringManager.signUp),
         ),
       ],
