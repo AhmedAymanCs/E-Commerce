@@ -1,10 +1,14 @@
+import 'package:e_commerce/feature/auth/login/data/repository/repository.dart';
 import 'package:e_commerce/feature/auth/login/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
-  LoginCubit() : super(LoginInitialState());
+  final AuthRepository _authRepository;
+  LoginCubit(this._authRepository) : super(LoginInitialState());
 
+  // ignore: strict_top_level_inference
   static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
+
   bool passwordObscure = true;
   bool rememberMe = false;
 
@@ -16,5 +20,17 @@ class LoginCubit extends Cubit<LoginStates> {
   void changeRememberMe() {
     rememberMe = !rememberMe;
     emit(ChangeRememberMeState());
+  }
+
+  Future<void> login({required String email, required String password}) async {
+    emit(LoginLoadingState());
+    final userCredential = await _authRepository.login(
+      email: email,
+      password: password,
+    );
+    userCredential.fold((r) {
+      print('error: $r');
+      emit(LoginErrorState(r));
+    }, (l) => emit(LoginSuccessState(l)));
   }
 }
