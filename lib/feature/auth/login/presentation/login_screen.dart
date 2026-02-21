@@ -118,10 +118,15 @@ class _LoginPageState extends State<LoginPage> {
                           return CustomButton(
                             text: StringManager.login,
                             onPressed: () {
-                              cubit.login(
+                              if (cubit.validator(
                                 email: _emailController.text,
                                 password: _passwordController.text,
-                              );
+                              )) {
+                                cubit.login(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
                             },
                           );
                         }

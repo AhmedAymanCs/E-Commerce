@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/login/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,5 +34,17 @@ class LoginCubit extends Cubit<LoginStates> {
       (r) => emit(LoginErrorState(r)),
       (l) => emit(LoginSuccessState(l)),
     );
+  }
+
+  bool validator({required String email, required String password}) {
+    if (email.trim().isEmpty) {
+      emit(LoginErrorState(StringManager.emailHint));
+      return false;
+    } else if (password.trim().isEmpty) {
+      emit(LoginErrorState(StringManager.passwordHint));
+      return false;
+    } else {
+      return true;
+    }
   }
 }

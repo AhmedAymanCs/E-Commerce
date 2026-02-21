@@ -12,6 +12,7 @@ class StringManager {
   static const String passwordHint = 'Enter your password';
   static const String confirmPassword = 'Confirm password';
   static const String confirmPasswordHint = 'Confirm your password';
+  static const String passwordNotMatch = 'Passwords don`t match';
   static const String rememberMe = 'Remember me';
   static const String login = 'Login';
   static const String userNotFound = 'Email or password is incorrect';

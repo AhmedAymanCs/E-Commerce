@@ -1,8 +1,10 @@
 import 'package:e_commerce/core/constants/string_manager.dart';
+import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/widgets/custom_button.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/core/widgets/logo_with_text.dart';
+import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/register/logic/cubit.dart';
 import 'package:e_commerce/feature/auth/register/logic/states.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterCubit(),
+      create: (context) => RegisterCubit(getIt<AuthRepository>()),
       child: Scaffold(
         body: Center(
           child: Padding(
@@ -66,15 +68,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     preicon: Icons.person_outlined,
                   ),
                   SizedBox(height: 15.h),
-                  //phone field
-                  CustomFormField(
-                    controller: _phoneController,
-                    hint: StringManager.phoneHint,
-                    title: StringManager.phone,
-                    preicon: Icons.phone_android_outlined,
-                    keyboardType: TextInputType.phone,
-                  ),
-                  SizedBox(height: 15.h),
                   //Email field
                   CustomFormField(
                     controller: _emailController,
@@ -82,6 +75,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     title: StringManager.email,
                     preicon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: 15.h),
+                  //phone field
+                  CustomFormField(
+                    controller: _phoneController,
+                    hint: StringManager.phoneHint,
+                    title: StringManager.phone,
+                    preicon: Icons.phone_android_outlined,
+                    keyboardType: TextInputType.phone,
                   ),
                   SizedBox(height: 15.h),
                   //Password field
@@ -145,7 +147,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         } else {
                           return CustomButton(
                             text: StringManager.signUp,
-                            onPressed: () {},
+                            onPressed: () {
+                              final bool isValid = cubit.validator(
+                                password: _passwordController.text,
+                                confirmPassword:
+                                    _confirmPasswordController.text,
+                                email: _emailController.text,
+                                name: _nameController.text,
+                                phone: _phoneController.text,
+                              );
+                              if (isValid) {
+                                cubit.register(
+                                  name: _nameController.text,
+                                  phone: _phoneController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
+                            },
                           );
                         }
                       },
