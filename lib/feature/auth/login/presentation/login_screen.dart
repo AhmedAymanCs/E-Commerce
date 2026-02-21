@@ -4,7 +4,7 @@ import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/widgets/custom_button.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/core/widgets/logo_with_text.dart';
-import 'package:e_commerce/feature/auth/login/data/repository/repository.dart';
+import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/login/logic/cubit.dart';
 import 'package:e_commerce/feature/auth/login/logic/states.dart';
 import 'package:e_commerce/feature/auth/login/presentation/shared_widgets.dart';

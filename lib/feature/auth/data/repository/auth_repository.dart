@@ -4,8 +4,8 @@ import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
-import 'package:e_commerce/feature/auth/login/data/data_scource/data_source.dart';
-import 'package:e_commerce/feature/auth/login/data/model/user_model.dart';
+import 'package:e_commerce/feature/auth/data/data_scource/auth_data_source.dart';
+import 'package:e_commerce/feature/auth/data/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepository {
