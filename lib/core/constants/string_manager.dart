@@ -16,6 +16,9 @@ class StringManager {
   static const String login = 'Login';
   static const String userNotFound = 'Email or password is incorrect';
   static const String checkYourInternet = 'Check your internet connection';
+  static const String weekPassword = 'The password provided is too weak.';
+  static const String emailAlreadyInUse =
+      'The email address is already in use by another account.';
   static const String forgotPassword = 'Forgot password?';
   static const String signUp = 'Sign up';
   static const String dontHaveAccount = 'Don\'t have an account?';

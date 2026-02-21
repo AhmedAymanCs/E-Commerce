@@ -14,6 +14,12 @@ abstract class AuthRepository {
     required String password,
     bool rememberMe = false,
   });
+  ServerResponse<void> register({
+    required String name,
+    required String phone,
+    required String email,
+    required String password,
+  });
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -47,6 +53,33 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(StringManager.checkYourInternet);
       }
       return Left(e.message ?? 'Something went wrong');
+    }
+  }
+
+  @override
+  ServerResponse<void> register({
+    required String name,
+    required String phone,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _authRemoteDataSource.register(
+        name: name,
+        phone: phone,
+        email: email,
+        password: password,
+      );
+      return const Right(null);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return Left(StringManager.weekPassword);
+      } else if (e.code == 'email-already-in-use') {
+        return Left(StringManager.emailAlreadyInUse);
+      }
+      return Left(e.message ?? 'Authentication Error');
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }
