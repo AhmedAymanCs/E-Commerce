@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/routing/routes.dart';
+import 'package:e_commerce/feature/auth/forget_passoword/presentation/forget_password_screen.dart';
 import 'package:e_commerce/feature/auth/login/presentation/login_screen.dart';
 import 'package:e_commerce/feature/auth/register/presentation/register_screen.dart';
 import 'package:e_commerce/feature/home/presentation/home_screen.dart';
@@ -14,6 +15,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (_) => const LoginPage());
+      case Routes.forgetPasswordRoute:
+        return MaterialPageRoute(builder: (_) => const ForgetPasswordPage());
       case Routes.registerRoute:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       default:

@@ -80,7 +80,12 @@ class _LoginPageState extends State<LoginPage> {
                       return RememberMeAndForgotPassRow(
                         rememberMeValue: cubit.rememberMe,
                         checkBoxOnPressed: (_) => cubit.changeRememberMe(),
-                        forgotPassOnPressed: () {},
+                        forgotPassOnPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.forgetPasswordRoute,
+                          );
+                        },
                       );
                     },
                   ),

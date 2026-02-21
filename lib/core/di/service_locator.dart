@@ -23,7 +23,7 @@ void setupDioLocator() {
   getIt.registerLazySingleton<DioHelper>(() => DioHelper(getIt<Dio>()));
 }
 
-void setupSeucreStorageLocator() {
+void setupSecureStorageLocator() {
   getIt.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(
       aOptions: AndroidOptions(),
