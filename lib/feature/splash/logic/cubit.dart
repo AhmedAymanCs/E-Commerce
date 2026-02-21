@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
-import 'package:e_commerce/feature/auth/data/model/user_model.dart';
+import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/splash/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

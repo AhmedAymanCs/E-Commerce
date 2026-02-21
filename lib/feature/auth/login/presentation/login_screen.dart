@@ -97,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           Routes.homeRoute,
                           (_) => false,
+                          arguments: state.userModel,
                         );
                       }
                       if (state is LoginErrorState) {

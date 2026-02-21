@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/auth/forget_passoword/presentation/forget_password_screen.dart';
 import 'package:e_commerce/feature/auth/login/presentation/login_screen.dart';
@@ -10,7 +11,10 @@ class AppRouter {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.homeRoute:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        final arg = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => HomePage(userModel: arg as UserModel),
+        );
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.loginRoute:
