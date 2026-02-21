@@ -1,47 +1,53 @@
 import 'package:e_commerce/core/constants/string_manager.dart';
-import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/widgets/custom_button.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/core/widgets/logo_with_text.dart';
-import 'package:e_commerce/feature/auth/login/data/repository/repository.dart';
-import 'package:e_commerce/feature/auth/login/logic/cubit.dart';
-import 'package:e_commerce/feature/auth/login/logic/states.dart';
-import 'package:e_commerce/feature/auth/login/presentation/shared_widgets.dart';
+import 'package:e_commerce/feature/auth/register/logic/cubit.dart';
+import 'package:e_commerce/feature/auth/register/logic/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(getIt<AuthRepository>()),
+      create: (context) => RegisterCubit(),
       child: Scaffold(
         body: Center(
           child: Padding(
@@ -50,20 +56,38 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const LogoWithText(text: StringManager.subTitleLoginPage),
+                  LogoWithText(text: StringManager.subTitleRegisterPage),
                   SizedBox(height: 20.h),
+                  //Name field
+                  CustomFormField(
+                    controller: _nameController,
+                    hint: StringManager.nameHint,
+                    title: StringManager.name,
+                    preicon: Icons.person_outlined,
+                  ),
+                  SizedBox(height: 15.h),
+                  //phone field
+                  CustomFormField(
+                    controller: _phoneController,
+                    hint: StringManager.phoneHint,
+                    title: StringManager.phone,
+                    preicon: Icons.phone_android_outlined,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  SizedBox(height: 15.h),
                   //Email field
                   CustomFormField(
                     controller: _emailController,
                     hint: StringManager.emailHint,
                     title: StringManager.email,
                     preicon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 15.h),
                   //Password field
-                  BlocBuilder<LoginCubit, LoginStates>(
+                  BlocBuilder<RegisterCubit, RegisterStates>(
                     builder: (context, state) {
-                      LoginCubit cubit = LoginCubit.get(context);
+                      RegisterCubit cubit = RegisterCubit.get(context);
                       return CustomFormField(
                         controller: _passwordController,
                         hint: StringManager.passwordHint,
@@ -74,27 +98,31 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                   ),
-                  BlocBuilder<LoginCubit, LoginStates>(
+                  SizedBox(height: 20.h),
+                  //Confirm Password field
+                  BlocBuilder<RegisterCubit, RegisterStates>(
                     builder: (context, state) {
-                      LoginCubit cubit = LoginCubit.get(context);
-                      return RememberMeAndForgotPassRow(
-                        rememberMeValue: cubit.rememberMe,
-                        checkBoxOnPressed: (_) => cubit.changeRememberMe(),
-                        forgotPassOnPressed: () {},
+                      RegisterCubit cubit = RegisterCubit.get(context);
+                      return CustomFormField(
+                        controller: _confirmPasswordController,
+                        hint: StringManager.confirmPasswordHint,
+                        title: StringManager.confirmPassword,
+                        preicon: Icons.lock_outlined,
+                        obscure: cubit.passwordObscure,
                       );
                     },
                   ),
-                  SizedBox(height: 20.h),
-                  BlocListener<LoginCubit, LoginStates>(
+                  SizedBox(height: 50.h),
+                  BlocListener<RegisterCubit, RegisterStates>(
                     listener: (context, state) {
-                      if (state is LoginSuccessState) {
+                      if (state is RegisterSuccessState) {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          Routes.homeRoute,
+                          Routes.loginRoute,
                           (_) => false,
                         );
                       }
-                      if (state is LoginErrorState) {
+                      if (state is RegisterErrorState) {
                         Fluttertoast.showToast(
                           msg: state.errorMessage,
                           toastLength: Toast.LENGTH_SHORT,
@@ -105,34 +133,23 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       }
                     },
-                    child: BlocBuilder<LoginCubit, LoginStates>(
+                    child: BlocBuilder<RegisterCubit, RegisterStates>(
                       buildWhen: (previous, current) {
-                        return current is LoginLoadingState ||
-                            current is LoginErrorState;
+                        return current is RegisterLoadingState ||
+                            current is RegisterErrorState;
                       },
                       builder: (context, state) {
-                        LoginCubit cubit = LoginCubit.get(context);
-                        if (state is LoginLoadingState) {
+                        RegisterCubit cubit = RegisterCubit.get(context);
+                        if (state is RegisterLoadingState) {
                           return const CircularProgressIndicator();
                         } else {
                           return CustomButton(
-                            text: StringManager.login,
-                            onPressed: () {
-                              cubit.login(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
-                            },
+                            text: StringManager.signUp,
+                            onPressed: () {},
                           );
                         }
                       },
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-                  RegisterRow(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.registerRoute);
-                    },
                   ),
                 ],
               ),

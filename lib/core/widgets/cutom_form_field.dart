@@ -9,6 +9,7 @@ class CustomFormField extends StatelessWidget {
   final String hint;
   final IconData? preicon;
   final VoidCallback? onPressed;
+  final TextInputType? keyboardType;
   final bool obscure;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -19,6 +20,7 @@ class CustomFormField extends StatelessWidget {
     required this.hint,
     this.preicon,
     this.onPressed,
+    this.keyboardType,
     this.obscure = false,
     this.controller,
     this.validator,
@@ -44,6 +46,7 @@ class CustomFormField extends StatelessWidget {
           validator: validator,
           obscureText: obscure,
           cursorColor: ColorManager.primaryColor,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             prefixIcon: preicon != null
                 ? Icon(preicon, color: ColorManager.gray500)
