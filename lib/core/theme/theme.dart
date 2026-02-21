@@ -6,6 +6,15 @@ class AppTheme {
   static final lightTheme = ThemeData(
     primaryColor: ColorManager.primaryColor,
     scaffoldBackgroundColor: ColorManager.scafoldBackgroundColor,
+    appBarTheme: AppBarTheme(
+      backgroundColor: ColorManager.scafoldBackgroundColor,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeightManager.semiBold,
+        fontSize: 25,
+        color: ColorManager.primaryColor,
+      ),
+    ),
     textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: ColorManager.primaryColor,
     ),

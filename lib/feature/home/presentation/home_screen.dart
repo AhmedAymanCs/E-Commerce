@@ -1,8 +1,11 @@
+import 'package:e_commerce/core/constants/image_manager.dart';
+import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatelessWidget {
   final UserModel userModel;
@@ -12,6 +15,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: SvgPicture.asset(ImageManager.logo, fit: BoxFit.contain),
+        title: Text(StringManager.appName),
         actions: [
           IconButton(
             onPressed: () {
