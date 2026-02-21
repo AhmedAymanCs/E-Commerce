@@ -20,6 +20,7 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+  ServerResponse<void> sendPasswordResetEmail({required String email});
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -78,6 +79,16 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(StringManager.emailAlreadyInUse);
       }
       return Left(e.message ?? 'Authentication Error');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _authRemoteDataSource.sendPasswordResetEmail(email: email);
+      return const Right(null);
     } catch (e) {
       return Left(e.toString());
     }

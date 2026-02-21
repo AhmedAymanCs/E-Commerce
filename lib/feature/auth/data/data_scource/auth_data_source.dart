@@ -12,6 +12,7 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+  Future<void> sendPasswordResetEmail({required String email});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -51,5 +52,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'street': '', //late add
         });
     return credential;
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

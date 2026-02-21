@@ -27,7 +27,7 @@ class RememberMeAndForgotPassRow extends StatelessWidget {
         Spacer(),
         TextButton(
           onPressed: forgotPassOnPressed,
-          child: Text(StringManager.forgotPassword),
+          child: Text('${StringManager.forgotPassword}?'),
         ),
       ],
     );
