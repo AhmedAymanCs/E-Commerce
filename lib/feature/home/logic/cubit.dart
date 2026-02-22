@@ -42,6 +42,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeChangeNavBarIndexState());
   } //changeNavBarIndex method
 
+  ///////////// home methods ///////////////////
   Future<void> getAllHomeData() async {
     emit(HomeGetProductsLoadingState());
 
@@ -67,13 +68,6 @@ class HomeCubit extends Cubit<HomeStates> {
         .toList();
     categoriesList.addAll(categories);
   } //getCategories method
-
-  Future<void> getCart() async {
-    final products = await _homeRepository.getCart();
-    products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
-      cartList = products;
-    });
-  } //getCart method
 
   void selectCategory(int index) {
     currentCategoryIndex = index;
@@ -106,13 +100,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeGetProductsSuccessState(products));
   } //searchProducts method
 
-  Future<void> addToCart(ProductModel product) async {
-    final cart = await _homeRepository.addToCart(product);
-    cart.fold(
-      (r) => emit(HomeAddToCartErrorState(r)),
-      (l) => emit(HomeAddToCartSuccessState()),
-    );
-  } //addToCart method
+  ///////////// wishlist methods ///////////////////
 
   Future<void> toggleWishlist(ProductModel product) async {
     final result = await _homeRepository.addToWishlist(product);
@@ -128,20 +116,6 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeAddToWishListSuccessState());
     });
   } //toggleWishlist (add / remove from wishlist)
-
-  Future<void> toggleCartlist(ProductModel product) async {
-    final result = await _homeRepository.addToCart(product);
-
-    result.fold((error) => emit(HomeAddToCartErrorState(error)), (success) {
-      if (cartList.any((element) => element.id == product.id)) {
-        cartList.removeWhere((element) => element.id == product.id);
-        _homeRepository.deleteFromCart(product.id);
-      } else {
-        wishList.add(product);
-      }
-      emit(HomeAddToCartSuccessState());
-    });
-  } //toggleCartlist (add / remove from cart)
 
   Future<void> getWishlist() async {
     emit(GetWishlistLoading());
@@ -163,4 +137,35 @@ class HomeCubit extends Cubit<HomeStates> {
     }).toList();
     emit(HomeGetProductsSuccessState(productsList));
   } //syncProductsWithWishlist method
+
+  ///////////// cart methods ///////////////////
+
+  Future<void> addToCart(ProductModel product) async {
+    final cart = await _homeRepository.addToCart(product);
+    cart.fold(
+      (r) => emit(HomeAddToCartErrorState(r)),
+      (l) => emit(HomeAddToCartSuccessState()),
+    );
+  } //addToCart method
+
+  Future<void> toggleCartlist(ProductModel product) async {
+    final result = await _homeRepository.addToCart(product);
+
+    result.fold((error) => emit(HomeAddToCartErrorState(error)), (success) {
+      if (cartList.any((element) => element.id == product.id)) {
+        cartList.removeWhere((element) => element.id == product.id);
+        _homeRepository.deleteFromCart(product.id);
+      } else {
+        wishList.add(product);
+      }
+      emit(HomeAddToCartSuccessState());
+    });
+  } //toggleCartlist (add / remove from cart)
+
+  Future<void> getCart() async {
+    final products = await _homeRepository.getCart();
+    products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
+      cartList = products;
+    });
+  } //getCart method
 }
