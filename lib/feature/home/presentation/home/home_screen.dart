@@ -3,7 +3,7 @@ import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
-import 'package:e_commerce/feature/home/presentation/home_layout/shared_widgets.dart';
+import 'package:e_commerce/feature/home/presentation/home/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
