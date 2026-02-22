@@ -69,4 +69,12 @@ class HomeCubit extends Cubit<HomeStates> {
       (l) => emit(HomeAddToCartSuccessState()),
     );
   }
+
+  Future<void> addToWishlist(ProductModel product) async {
+    final wishList = await _homeRepository.addToWishlist(product);
+    wishList.fold(
+      (r) => emit(HomeAddToWishListErrorState(r)),
+      (l) => emit(HomeAddToWishListSuccessState()),
+    );
+  }
 }

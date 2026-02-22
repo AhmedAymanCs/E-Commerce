@@ -25,8 +25,8 @@ class HomePage extends StatelessWidget {
       create: (context) => HomeCubit(getIt<HomeRepository>())..getProducts(),
       child: BlocListener<HomeCubit, HomeStates>(
         listener: (context, state) {
-          if (state is HomeAddToCartSuccessState) {
-            Fluttertoast.showToast(msg: 'Product Added to Cart');
+          if (state is HomeAddToWishListSuccessState) {
+            Fluttertoast.showToast(msg: 'Product Added to Wishlist');
           }
         },
         child: Scaffold(
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                               product: state.products[index],
                               addToCartPreessed: () => HomeCubit.get(
                                 context,
-                              ).addToCart(state.products[index]),
+                              ).addToWishlist(state.products[index]),
                             );
                           },
                         ),

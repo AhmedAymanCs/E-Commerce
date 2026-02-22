@@ -11,7 +11,7 @@ import 'package:e_commerce/core/models/product_model.dart';
 
 abstract class HomeRemoteDataSource {
   Future<Response> getProducts();
-  Future<Response> addToWishlist();
+  Future<void> addToWishlist(ProductModel product);
   Future<Response> getWishlist();
   Future<Response> getCart();
   Future<void> addToCart(ProductModel product);
@@ -32,7 +32,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       key: AppConstants.userSessipn,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    _firestore
+    await _firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName)
@@ -41,9 +41,17 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<Response> addToWishlist() {
-    // TODO: implement addToWishlist
-    throw UnimplementedError();
+  Future<void> addToWishlist(ProductModel product) async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSessipn,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    await _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.wishlistCollectionName)
+        .doc(product.id.toString())
+        .set(product.toJson());
   }
 
   @override

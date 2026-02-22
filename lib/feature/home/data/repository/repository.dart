@@ -6,6 +6,7 @@ import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
 abstract class HomeRepository {
   ServerResponse<List<ProductModel>> getProducts();
   ServerResponse<void> addToCart(ProductModel product);
+  ServerResponse<void> addToWishlist(ProductModel product);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -34,6 +35,16 @@ class HomeRepositoryImpl implements HomeRepository {
   ServerResponse<void> addToCart(ProductModel product) async {
     try {
       await _homeRemoteDataSource.addToCart(product);
+      return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> addToWishlist(ProductModel product) async {
+    try {
+      await _homeRemoteDataSource.addToWishlist(product);
       return const Right(null);
     } catch (e) {
       return Left(e.toString());

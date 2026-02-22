@@ -8,6 +8,7 @@ class ProductModel {
   final double price;
   final double discountPercentage;
   final int stock;
+  bool isFavorite = false;
 
   ProductModel({
     required this.id,

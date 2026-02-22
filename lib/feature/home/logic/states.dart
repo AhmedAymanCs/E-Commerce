@@ -24,3 +24,10 @@ class HomeAddToCartErrorState extends HomeStates {
   final String errorMessage;
   HomeAddToCartErrorState(this.errorMessage);
 }
+
+class HomeAddToWishListSuccessState extends HomeStates {}
+
+class HomeAddToWishListErrorState extends HomeStates {
+  final String errorMessage;
+  HomeAddToWishListErrorState(this.errorMessage);
+}
