@@ -1,3 +1,4 @@
+import 'package:e_commerce/feature/home/data/models/cart_model.dart';
 import 'package:e_commerce/feature/home/data/models/product_model.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
@@ -28,7 +29,7 @@ class HomeCubit extends Cubit<HomeStates> {
     const CartPage(),
   ];
   int navBarCurrentIndex = 0;
-
+  CartModel cartModel = CartModel(discount: 0, subtotal: 0, tax: 0, total: 0);
   void changeNavBarIndex(int index) {
     navBarCurrentIndex = index;
     emit(HomeChangeNavBarIndexState());

@@ -1,4 +1,3 @@
-import 'dart:ffi' hide Size;
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/feature/home/data/models/product_model.dart';
@@ -25,7 +24,7 @@ class WishlistItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: ColorManager.gray300,
             blurRadius: 5,
             spreadRadius: 2,
           ),

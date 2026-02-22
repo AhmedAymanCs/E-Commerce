@@ -24,7 +24,12 @@ class CartPage extends StatelessWidget {
                     CartItem(product: cubit.cartList[index], quantity: 1),
               ),
             ),
-            OrderSummary(discount: 10, subtotal: 79.99, tax: 8, total: 79.99),
+            OrderSummary(
+              discount: cubit.cartModel.discount,
+              subtotal: cubit.cartModel.subtotal,
+              tax: cubit.cartModel.tax,
+              total: cubit.cartModel.total,
+            ),
             BottomButton(text: "Checkout", onPressed: () {}),
           ],
         );

@@ -1,3 +1,5 @@
+import 'package:e_commerce/core/constants/app_constants.dart';
+import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/feature/home/data/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +97,7 @@ class OrderSummary extends StatelessWidget {
 }
 
 class BottomButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
   const BottomButton({super.key, required this.onPressed, required this.text});
   @override
@@ -104,8 +106,8 @@ class BottomButton extends StatelessWidget {
       padding: EdgeInsets.all(12.w),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1A56F0),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          backgroundColor: ColorManager.primaryColor,
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.button),
         ),
         onPressed: onPressed,
         child: Text(
@@ -133,7 +135,7 @@ class QuantityBtn extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: AppRadius.button,
         ),
         child: Icon(icon, size: 16),
       ),
