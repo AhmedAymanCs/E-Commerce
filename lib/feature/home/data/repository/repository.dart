@@ -1,0 +1,31 @@
+import 'package:dartz/dartz.dart';
+import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/core/utils/typedef.dart';
+import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
+
+abstract class HomeRepository {
+  ServerResponse<List<ProductModel>> getProducts();
+}
+
+class HomeRepositoryImpl implements HomeRepository {
+  final HomeRemoteDataSource _homeRemoteDataSource;
+  HomeRepositoryImpl(this._homeRemoteDataSource);
+
+  @override
+  ServerResponse<List<ProductModel>> getProducts() async {
+    try {
+      final response = await _homeRemoteDataSource.getProducts();
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['products'];
+        final List<ProductModel> products = data
+            .map((product) => ProductModel.fromJson(product))
+            .toList();
+        return Right(products);
+      } else {
+        return Left("Server Error :${response.statusCode}");
+      }
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+}

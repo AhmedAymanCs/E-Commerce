@@ -1,5 +1,6 @@
 class StringManager {
   static const String appName = 'E-Market';
+  //Auth pages
   static const String subTitleLoginPage = 'Sign in to continue shopping';
   static const String subTitleRegisterPage = 'Sign up to start shopping';
   static const String name = 'Full name';
@@ -23,4 +24,9 @@ class StringManager {
   static const String forgotPassword = 'Forgot password';
   static const String signUp = 'Sign up';
   static const String dontHaveAccount = 'Don\'t have an account?';
+  //Home page
+  static const String home = 'Home';
+  static const String cart = 'Cart';
+  static const String search = 'Search';
+  static const String searchHint = 'Search for products';
 }

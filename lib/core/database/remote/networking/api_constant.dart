@@ -1,7 +1,6 @@
 class ApiConstant {
-  static const String baseUrl = '';
-  static const String endPoint = '';
-  static const Map<String, String> queryParameters = {};
+  static const String baseUrl = 'https://dummyjson.com/';
+  static const String productEndPoint = 'products';
   static const Map<String, String> headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
