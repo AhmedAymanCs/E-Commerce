@@ -45,9 +45,20 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomFormField(
-                hint: StringManager.searchHint,
-                preicon: Icons.search,
+              BlocBuilder<HomeCubit, HomeStates>(
+                builder: (context, state) {
+                  final HomeCubit cubit = HomeCubit.get(context);
+                  return CustomFormField(
+                    hint: StringManager.searchHint,
+                    preicon: Icons.search,
+                    onChanged: (text) {
+                      cubit.searchProducts(text ?? '');
+                    },
+                    onSubmitted: (text) {
+                      cubit.searchProducts(text ?? '');
+                    },
+                  );
+                },
               ),
               SizedBox(height: 10.h),
               BlocBuilder<HomeCubit, HomeStates>(
@@ -77,8 +88,19 @@ class HomePage extends StatelessWidget {
                     current is HomeGetProductsSuccessState,
                 builder: (context, state) {
                   if (state is HomeGetProductsErrorState) {
-                    return Center(child: Text('Error : ${state.errorMessage}'));
+                    return Expanded(
+                      child: Center(
+                        child: Text('Error : ${state.errorMessage}'),
+                      ),
+                    );
                   } else if (state is HomeGetProductsSuccessState) {
+                    if (state.products.isEmpty) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(StringManager.noProductsFound),
+                        ),
+                      );
+                    }
                     return Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(16),
@@ -98,7 +120,9 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return Expanded(
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
                   }
                 },
               ),

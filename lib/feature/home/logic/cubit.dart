@@ -34,6 +34,31 @@ class HomeCubit extends Cubit<HomeStates> {
 
   void selectCategory(int index) {
     currentCategoryIndex = index;
+    filterProducts();
     emit(HomeChangeCategoryState());
+  }
+
+  void filterProducts() {
+    emit(HomeGetProductsLoadingState());
+    final products = productsList.where((product) {
+      if (currentCategoryIndex == 0) {
+        return true;
+      } else {
+        return product.category == categoriesList[currentCategoryIndex];
+      }
+    }).toList();
+    emit(HomeGetProductsSuccessState(products));
+  }
+
+  void searchProducts(String text) {
+    emit(HomeGetProductsLoadingState());
+    final products = productsList.where((product) {
+      if (text.isEmpty) {
+        return true;
+      } else {
+        return product.title.toLowerCase().contains(text.toLowerCase());
+      }
+    }).toList();
+    emit(HomeGetProductsSuccessState(products));
   }
 }

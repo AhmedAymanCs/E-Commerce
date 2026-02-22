@@ -27,5 +27,8 @@ class AppTheme {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: ColorManager.primaryColor,
     ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: ColorManager.primaryColor,
+    ),
   );
 }

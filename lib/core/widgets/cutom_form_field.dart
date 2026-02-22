@@ -13,6 +13,8 @@ class CustomFormField extends StatelessWidget {
   final bool obscure;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final void Function(String?)? onChanged;
+  final void Function(String?)? onSubmitted;
 
   const CustomFormField({
     super.key,
@@ -24,6 +26,8 @@ class CustomFormField extends StatelessWidget {
     this.obscure = false,
     this.controller,
     this.validator,
+    this.onChanged,
+    this.onSubmitted,
   });
 
   @override
@@ -42,6 +46,8 @@ class CustomFormField extends StatelessWidget {
           SizedBox(height: 5.h),
         ],
         TextFormField(
+          onChanged: onChanged,
+          onSaved: onSubmitted,
           controller: controller,
           validator: validator,
           obscureText: obscure,
