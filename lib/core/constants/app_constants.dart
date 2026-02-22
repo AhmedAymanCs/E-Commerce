@@ -15,7 +15,7 @@ class AppRadius {
 }
 
 class AppConstants {
-  static const String userSessipn = 'user_session';
+  static const String userSession = 'user_session';
   static const String usersCollectionName = 'Users';
   static const String cartCollectionName = 'Cart';
   static const String wishlistCollectionName = 'Wishlist';

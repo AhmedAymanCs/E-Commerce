@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_constants.dart';
@@ -12,7 +11,8 @@ import 'package:e_commerce/core/models/product_model.dart';
 abstract class HomeRemoteDataSource {
   Future<Response> getProducts();
   Future<void> addToWishlist(ProductModel product);
-  Future<Response> getWishlist();
+  Future<void> deleteFromWishList(int productId);
+  Future<List<ProductModel>> getWishlist();
   Future<Response> getCart();
   Future<void> addToCart(ProductModel product);
 }
@@ -29,7 +29,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<void> addToCart(ProductModel product) async {
     final userSession = await getIt<SecureStorageHelper>().getData(
-      key: AppConstants.userSessipn,
+      key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
     await _firestore
@@ -43,7 +43,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<void> addToWishlist(ProductModel product) async {
     final userSession = await getIt<SecureStorageHelper>().getData(
-      key: AppConstants.userSessipn,
+      key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
     await _firestore
@@ -61,8 +61,32 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<Response> getWishlist() {
-    // TODO: implement getWishlist
-    throw UnimplementedError();
+  Future<List<ProductModel>> getWishlist() async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    final querySnapshot = await _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.wishlistCollectionName)
+        .get();
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
+  Future<void> deleteFromWishList(int productId) async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    await _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.wishlistCollectionName)
+        .doc(productId.toString())
+        .delete();
   }
 }

@@ -85,7 +85,12 @@ class ProductCardItem extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: IconButton(
                     onPressed: addToCartPreessed,
-                    icon: Icon(Icons.favorite_border, color: Colors.grey),
+                    icon: Icon(
+                      product.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: product.isFavorite ? Colors.red : Colors.grey,
+                    ),
                   ),
                 ),
               ),

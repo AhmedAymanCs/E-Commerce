@@ -7,6 +7,8 @@ abstract class HomeRepository {
   ServerResponse<List<ProductModel>> getProducts();
   ServerResponse<void> addToCart(ProductModel product);
   ServerResponse<void> addToWishlist(ProductModel product);
+  ServerResponse<void> deleteFromWishList(int productId);
+  ServerResponse<List<ProductModel>> getWishList();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -46,6 +48,26 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       await _homeRemoteDataSource.addToWishlist(product);
       return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> deleteFromWishList(int productId) async {
+    try {
+      await _homeRemoteDataSource.deleteFromWishList(productId);
+      return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<List<ProductModel>> getWishList() async {
+    try {
+      final wishlist = await _homeRemoteDataSource.getWishlist();
+      return Right(wishlist);
     } catch (e) {
       return Left(e.toString());
     }

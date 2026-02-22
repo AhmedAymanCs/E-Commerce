@@ -31,3 +31,15 @@ class HomeAddToWishListErrorState extends HomeStates {
   final String errorMessage;
   HomeAddToWishListErrorState(this.errorMessage);
 }
+
+class GetWishlistLoading extends HomeStates {}
+
+class GetWishlistSuccess extends HomeStates {
+  final List<ProductModel> wishlist;
+  GetWishlistSuccess(this.wishlist);
+}
+
+class GetWishlistError extends HomeStates {
+  final String message;
+  GetWishlistError(this.message);
+}

@@ -8,7 +8,7 @@ class ProductModel {
   final double price;
   final double discountPercentage;
   final int stock;
-  bool isFavorite = false;
+  final bool isFavorite;
 
   ProductModel({
     required this.id,
@@ -20,6 +20,7 @@ class ProductModel {
     required this.availabilityStatus,
     required this.discountPercentage,
     required this.stock,
+    this.isFavorite = false,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -52,5 +53,31 @@ class ProductModel {
       'discountPercentage': discountPercentage,
       'stock': stock,
     };
+  }
+
+  ProductModel copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? category,
+    String? availabilityStatus,
+    List<String>? images,
+    double? price,
+    double? discountPercentage,
+    int? stock,
+    bool? isFavorite,
+  }) {
+    return ProductModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      availabilityStatus: availabilityStatus ?? this.availabilityStatus,
+      images: images ?? this.images,
+      price: price ?? this.price,
+      discountPercentage: discountPercentage ?? this.discountPercentage,
+      stock: stock ?? this.stock,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
   }
 }

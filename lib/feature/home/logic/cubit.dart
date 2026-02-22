@@ -11,16 +11,24 @@ class HomeCubit extends Cubit<HomeStates> {
   static HomeCubit get(context) => BlocProvider.of(context);
   List<ProductModel> productsList = [];
   List<String> categoriesList = ['All'];
+  List<ProductModel> wishList = [];
   int currentCategoryIndex = 0;
-  Future<void> getProducts() async {
+
+  Future<void> getAllHomeData() async {
     emit(HomeGetProductsLoadingState());
+
+    await Future.wait([getProducts(), getWishlist()]);
+
+    syncProductsWithWishlist();
+  }
+
+  Future<void> getProducts() async {
     final products = await _homeRepository.getProducts();
     products.fold((error) => emit(HomeGetProductsErrorState(error)), (
       products,
     ) {
       productsList = products;
       getCategories();
-      emit(HomeGetProductsSuccessState(products));
     });
   }
 
@@ -70,11 +78,39 @@ class HomeCubit extends Cubit<HomeStates> {
     );
   }
 
-  Future<void> addToWishlist(ProductModel product) async {
-    final wishList = await _homeRepository.addToWishlist(product);
-    wishList.fold(
-      (r) => emit(HomeAddToWishListErrorState(r)),
-      (l) => emit(HomeAddToWishListSuccessState()),
-    );
+  Future<void> toggleWishlist(ProductModel product) async {
+    final result = await _homeRepository.addToWishlist(product);
+
+    result.fold((error) => emit(HomeAddToWishListErrorState(error)), (success) {
+      if (wishList.any((element) => element.id == product.id)) {
+        wishList.removeWhere((element) => element.id == product.id);
+        _homeRepository.deleteFromWishList(product.id);
+      } else {
+        wishList.add(product);
+      }
+      syncProductsWithWishlist();
+      emit(HomeAddToWishListSuccessState());
+    });
+  }
+
+  Future<void> getWishlist() async {
+    emit(GetWishlistLoading());
+    final result = await _homeRepository.getWishList();
+    result.fold((r) => emit(GetWishlistError(r)), (data) {
+      wishList = data;
+      emit(GetWishlistSuccess(data));
+    });
+  }
+
+  void syncProductsWithWishlist() {
+    final wishlistIds = wishList.map((item) => item.id).toSet();
+    productsList = productsList.map((product) {
+      if (wishlistIds.contains(product.id)) {
+        return product.copyWith(isFavorite: true);
+      } else {
+        return product.copyWith(isFavorite: false);
+      }
+    }).toList();
+    emit(HomeGetProductsSuccessState(productsList));
   }
 }

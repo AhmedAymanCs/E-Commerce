@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit(getIt<HomeRepository>())..getProducts(),
+      create: (context) => HomeCubit(getIt<HomeRepository>())..getAllHomeData(),
       child: BlocListener<HomeCubit, HomeStates>(
         listener: (context, state) {
           if (state is HomeAddToWishListSuccessState) {
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                               product: state.products[index],
                               addToCartPreessed: () => HomeCubit.get(
                                 context,
-                              ).addToWishlist(state.products[index]),
+                              ).toggleWishlist(state.products[index]),
                             );
                           },
                         ),
