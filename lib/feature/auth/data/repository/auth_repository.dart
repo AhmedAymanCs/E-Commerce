@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
@@ -41,8 +42,8 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (userCredential.user != null) {
-        final userDoc = await FirebaseFirestore.instance
-            .collection('Users')
+        final userDoc = await getIt<FirebaseFirestore>()
+            .collection(AppConstants.usersCollectionName)
             .doc(userCredential.user!.uid)
             .get();
 

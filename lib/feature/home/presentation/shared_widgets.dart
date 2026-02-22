@@ -42,7 +42,8 @@ class CategoryCard extends StatelessWidget {
 // ignore: must_be_immutable
 class ProductCardItem extends StatelessWidget {
   ProductModel product;
-  ProductCardItem({super.key, required this.product});
+  final VoidCallback? addToCartPreessed;
+  ProductCardItem({super.key, required this.product, this.addToCartPreessed});
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +78,13 @@ class ProductCardItem extends StatelessWidget {
                     ),
                   ),
                 ),
-
               Positioned(
                 top: 8,
                 right: 8,
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: addToCartPreessed,
                     icon: Icon(Icons.favorite_border, color: Colors.grey),
                   ),
                 ),

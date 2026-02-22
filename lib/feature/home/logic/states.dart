@@ -17,3 +17,10 @@ class HomeGetProductsErrorState extends HomeStates {
   final String errorMessage;
   HomeGetProductsErrorState(this.errorMessage);
 }
+
+class HomeAddToCartSuccessState extends HomeStates {}
+
+class HomeAddToCartErrorState extends HomeStates {
+  final String errorMessage;
+  HomeAddToCartErrorState(this.errorMessage);
+}

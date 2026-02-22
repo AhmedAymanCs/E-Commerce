@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/database/remote/networking/api_constant.dart';
 import 'package:e_commerce/core/database/remote/networking/dio_helper.dart';
@@ -23,12 +24,6 @@ void setupDioLocator() {
     ),
   );
   getIt.registerLazySingleton<DioHelper>(() => DioHelper(getIt<Dio>()));
-  getIt.registerLazySingleton<HomeRemoteDataSource>(
-    () => HomeRemoteDataSourceImpl(getIt<DioHelper>()),
-  );
-  getIt.registerLazySingleton<HomeRepository>(
-    () => HomeRepositoryImpl(getIt<HomeRemoteDataSource>()),
-  );
 }
 
 void setupSecureStorageLocator() {
@@ -50,5 +45,20 @@ void setupAuthRepositoryLocator() {
   );
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(getIt<AuthRemoteDataSource>()),
+  );
+}
+
+void setupFirestoreLocator() {
+  getIt.registerLazySingleton<FirebaseFirestore>(
+    () => FirebaseFirestore.instance,
+  );
+  getIt.registerLazySingleton<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(
+      getIt<DioHelper>(),
+      getIt<FirebaseFirestore>(),
+    ),
+  );
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(getIt<HomeRemoteDataSource>()),
   );
 }

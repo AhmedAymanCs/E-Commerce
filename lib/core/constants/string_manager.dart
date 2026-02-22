@@ -27,6 +27,7 @@ class StringManager {
   //Home page
   static const String home = 'Home';
   static const String cart = 'Cart';
+  static const String wishlist = 'Wishlist';
   static const String search = 'Search';
   static const String searchHint = 'Search for products';
   static const String noProductsFound = 'No Products Found';

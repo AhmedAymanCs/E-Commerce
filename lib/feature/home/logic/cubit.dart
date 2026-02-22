@@ -61,4 +61,12 @@ class HomeCubit extends Cubit<HomeStates> {
     }).toList();
     emit(HomeGetProductsSuccessState(products));
   }
+
+  Future<void> addToCart(ProductModel product) async {
+    final cart = await _homeRepository.addToCart(product);
+    cart.fold(
+      (r) => emit(HomeAddToCartErrorState(r)),
+      (l) => emit(HomeAddToCartSuccessState()),
+    );
+  }
 }

@@ -13,3 +13,10 @@ class AppRadius {
   // Radius for Cards and large Containers in the Product Catalog
   static BorderRadius card = BorderRadius.circular(16);
 }
+
+class AppConstants {
+  static const String userSessipn = 'user_session';
+  static const String usersCollectionName = 'Users';
+  static const String cartCollectionName = 'Cart';
+  static const String wishlistCollectionName = 'Wishlist';
+}

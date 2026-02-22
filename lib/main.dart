@@ -13,6 +13,7 @@ void main() async {
   setupDioLocator();
   setupSecureStorageLocator();
   setupAuthRepositoryLocator();
+  setupFirestoreLocator();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
