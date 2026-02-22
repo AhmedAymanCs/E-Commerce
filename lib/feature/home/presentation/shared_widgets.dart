@@ -51,13 +51,45 @@ class ProductCardItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            product.images.isNotEmpty
-                ? product.images[0]
-                : 'https://image2url.com/r2/default/images/1771764216790-8cbef40a-56fc-4a8e-9400-c5eca3ac1604.jpg',
-            height: 120,
-            width: double.infinity,
-            fit: BoxFit.contain,
+          Stack(
+            children: [
+              Image.network(
+                product.images.isNotEmpty
+                    ? product.images[0]
+                    : 'https://image2url.com/r2/default/images/1771764216790-8cbef40a-56fc-4a8e-9400-c5eca3ac1604.jpg',
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+              if (product.stock < 10)
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      "Only ${product.stock} left",
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+
+              Positioned(
+                top: 8,
+                right: 8,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.favorite_border, color: Colors.grey),
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),
@@ -68,14 +100,14 @@ class ProductCardItem extends StatelessWidget {
                   product.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeightManager.semiBold),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 5.h),
                 Text(
                   "\$${product.price}",
                   style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontWeight: FontWeightManager.bold,
                     fontSize: 16,
                   ),
                 ),

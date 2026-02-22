@@ -105,13 +105,12 @@ class HomePage extends StatelessWidget {
                       child: GridView.builder(
                         padding: const EdgeInsets.all(16),
                         itemCount: state.products.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.7.w,
+                        ),
                         itemBuilder: (context, index) {
                           return ProductCardItem(
                             product: state.products[index],
