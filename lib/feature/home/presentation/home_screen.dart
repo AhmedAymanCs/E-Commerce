@@ -23,141 +23,133 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeCubit(getIt<HomeRepository>())..getAllHomeData(),
-      child: BlocListener<HomeCubit, HomeStates>(
-        listener: (context, state) {
-          if (state is HomeAddToWishListSuccessState) {
-            Fluttertoast.showToast(msg: 'Product Added to Wishlist');
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            leading: SvgPicture.asset(ImageManager.logo, fit: BoxFit.contain),
-            title: Text(StringManager.appName),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  getIt<SecureStorageHelper>().clearAll();
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.loginRoute,
-                    (_) => false,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: SvgPicture.asset(ImageManager.logo, fit: BoxFit.contain),
+          title: Text(StringManager.appName),
+          actions: [
+            IconButton(
+              onPressed: () {
+                getIt<SecureStorageHelper>().clearAll();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.loginRoute,
+                  (_) => false,
+                );
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<HomeCubit, HomeStates>(
+                builder: (context, state) {
+                  final HomeCubit cubit = HomeCubit.get(context);
+                  return CustomFormField(
+                    hint: StringManager.searchHint,
+                    preicon: Icons.search,
+                    onChanged: (text) {
+                      cubit.searchProducts(text ?? '');
+                    },
+                    onSubmitted: (text) {
+                      cubit.searchProducts(text ?? '');
+                    },
                   );
                 },
-                icon: const Icon(Icons.logout),
               ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<HomeCubit, HomeStates>(
-                  builder: (context, state) {
-                    final HomeCubit cubit = HomeCubit.get(context);
-                    return CustomFormField(
-                      hint: StringManager.searchHint,
-                      preicon: Icons.search,
-                      onChanged: (text) {
-                        cubit.searchProducts(text ?? '');
-                      },
-                      onSubmitted: (text) {
-                        cubit.searchProducts(text ?? '');
-                      },
-                    );
-                  },
-                ),
-                SizedBox(height: 10.h),
-                BlocBuilder<HomeCubit, HomeStates>(
-                  builder: (context, state) {
-                    HomeCubit cubit = HomeCubit.get(context);
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          ...List.generate(
-                            cubit.categoriesList.length,
-                            (index) => CategoryCard(
-                              title: cubit.categoriesList[index],
-                              isSelected: cubit.currentCategoryIndex == index,
-                              onPressed: () => cubit.selectCategory(index),
-                            ),
+              SizedBox(height: 10.h),
+              BlocBuilder<HomeCubit, HomeStates>(
+                builder: (context, state) {
+                  HomeCubit cubit = HomeCubit.get(context);
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...List.generate(
+                          cubit.categoriesList.length,
+                          (index) => CategoryCard(
+                            title: cubit.categoriesList[index],
+                            isSelected: cubit.currentCategoryIndex == index,
+                            onPressed: () => cubit.selectCategory(index),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              BlocBuilder<HomeCubit, HomeStates>(
+                buildWhen: (previous, current) =>
+                    current is HomeGetProductsLoadingState ||
+                    current is HomeGetProductsErrorState ||
+                    current is HomeGetProductsSuccessState,
+                builder: (context, state) {
+                  if (state is HomeGetProductsErrorState) {
+                    return Expanded(
+                      child: Center(
+                        child: Text('Error : ${state.errorMessage}'),
                       ),
                     );
-                  },
-                ),
-                BlocBuilder<HomeCubit, HomeStates>(
-                  buildWhen: (previous, current) =>
-                      current is HomeGetProductsLoadingState ||
-                      current is HomeGetProductsErrorState ||
-                      current is HomeGetProductsSuccessState,
-                  builder: (context, state) {
-                    if (state is HomeGetProductsErrorState) {
+                  } else if (state is HomeGetProductsSuccessState) {
+                    if (state.products.isEmpty) {
                       return Expanded(
                         child: Center(
-                          child: Text('Error : ${state.errorMessage}'),
+                          child: Text(StringManager.noProductsFound),
                         ),
-                      );
-                    } else if (state is HomeGetProductsSuccessState) {
-                      if (state.products.isEmpty) {
-                        return Expanded(
-                          child: Center(
-                            child: Text(StringManager.noProductsFound),
-                          ),
-                        );
-                      }
-                      return Expanded(
-                        child: GridView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: state.products.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: 0.7.w,
-                              ),
-                          itemBuilder: (context, index) {
-                            return ProductCardItem(
-                              product: state.products[index],
-                              addToCartPreessed: () => HomeCubit.get(
-                                context,
-                              ).toggleWishlist(state.products[index]),
-                            );
-                          },
-                        ),
-                      );
-                    } else {
-                      return Expanded(
-                        child: const Center(child: CircularProgressIndicator()),
                       );
                     }
-                  },
-                ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: (value) {},
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.home),
-                label: StringManager.home,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.shopping_cart),
-                label: StringManager.cart,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.favorite),
-                label: StringManager.wishlist,
+                    return Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: state.products.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.7.w,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ProductCardItem(
+                            product: state.products[index],
+                            addToCartPreessed: () => HomeCubit.get(
+                              context,
+                            ).toggleWishlist(state.products[index]),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                },
               ),
             ],
-            currentIndex: 0,
           ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (value) {},
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home),
+              label: StringManager.home,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.shopping_cart),
+              label: StringManager.cart,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.favorite),
+              label: StringManager.wishlist,
+            ),
+          ],
+          currentIndex: 0,
         ),
       ),
     );
