@@ -1,18 +1,33 @@
 import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
+import 'package:e_commerce/feature/home/presentation/home_layout/home_screen.dart';
+import 'package:e_commerce/feature/home/presentation/wishlist_layout/wishlist_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
   final HomeRepository _homeRepository;
-  HomeCubit(this._homeRepository) : super(HomeInitialState());
+  final UserModel userModel;
+  HomeCubit(this._homeRepository, this.userModel) : super(HomeInitialState());
 
   // ignore: strict_top_level_inference
   static HomeCubit get(context) => BlocProvider.of(context);
+
   List<ProductModel> productsList = [];
   List<String> categoriesList = ['All'];
   List<ProductModel> wishList = [];
   int currentCategoryIndex = 0;
+
+  List<Widget> get pages => [HomePage(userModel: userModel), WishlistPage()];
+  int navBarCurrentIndex = 0;
+
+  void changeNavBarIndex(int index) {
+    navBarCurrentIndex = index;
+    emit(HomeChangeNavBarIndexState());
+  }
 
   Future<void> getAllHomeData() async {
     emit(HomeGetProductsLoadingState());
