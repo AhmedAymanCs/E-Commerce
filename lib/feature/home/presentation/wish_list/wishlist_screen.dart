@@ -1,6 +1,6 @@
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
-import 'package:e_commerce/feature/home/presentation/wishlist/shared_widgets.dart';
+import 'package:e_commerce/feature/home/presentation/wish_list/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
