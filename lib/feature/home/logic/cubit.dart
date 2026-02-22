@@ -21,19 +21,26 @@ class HomeCubit extends Cubit<HomeStates> {
   List<String> categoriesList = ['All'];
   List<ProductModel> wishList = [];
   List<ProductModel> cartList = [];
+
   int currentCategoryIndex = 0;
 
   List<Widget> get pages => [
     HomePage(userModel: userModel),
     const WishlistPage(),
     const CartPage(),
-  ];
-  int navBarCurrentIndex = 0;
-  CartModel cartModel = CartModel(discount: 0, subtotal: 0, tax: 0, total: 0);
+  ]; //initialize bottom navigation bar pages
+  int navBarCurrentIndex = 0; //initialize nav bar index
+  CartModel cartModel = CartModel(
+    discount: 0,
+    subtotal: 0,
+    tax: 0,
+    total: 0,
+  ); //initialize cart model
+
   void changeNavBarIndex(int index) {
     navBarCurrentIndex = index;
     emit(HomeChangeNavBarIndexState());
-  }
+  } //changeNavBarIndex method
 
   Future<void> getAllHomeData() async {
     emit(HomeGetProductsLoadingState());
@@ -41,7 +48,7 @@ class HomeCubit extends Cubit<HomeStates> {
     await Future.wait([getProducts(), getWishlist(), getCart()]);
 
     syncProductsWithWishlist();
-  }
+  } //getAllHomeData method (get all data from home repository) in frist open app
 
   Future<void> getProducts() async {
     final products = await _homeRepository.getProducts();
@@ -51,7 +58,7 @@ class HomeCubit extends Cubit<HomeStates> {
       productsList = products;
       getCategories();
     });
-  }
+  } //getProducts method
 
   void getCategories() {
     final categories = productsList
@@ -59,20 +66,20 @@ class HomeCubit extends Cubit<HomeStates> {
         .toSet()
         .toList();
     categoriesList.addAll(categories);
-  }
+  } //getCategories method
 
   Future<void> getCart() async {
     final products = await _homeRepository.getCart();
     products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
       cartList = products;
     });
-  }
+  } //getCart method
 
   void selectCategory(int index) {
     currentCategoryIndex = index;
     filterProducts();
     emit(HomeChangeCategoryState());
-  }
+  } //selectCategory method
 
   void filterProducts() {
     emit(HomeGetProductsLoadingState());
@@ -86,6 +93,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeGetProductsSuccessState(products));
   }
 
+  //filterProducts method by category
   void searchProducts(String text) {
     emit(HomeGetProductsLoadingState());
     final products = productsList.where((product) {
@@ -96,7 +104,7 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     }).toList();
     emit(HomeGetProductsSuccessState(products));
-  }
+  } //searchProducts method
 
   Future<void> addToCart(ProductModel product) async {
     final cart = await _homeRepository.addToCart(product);
@@ -104,7 +112,7 @@ class HomeCubit extends Cubit<HomeStates> {
       (r) => emit(HomeAddToCartErrorState(r)),
       (l) => emit(HomeAddToCartSuccessState()),
     );
-  }
+  } //addToCart method
 
   Future<void> toggleWishlist(ProductModel product) async {
     final result = await _homeRepository.addToWishlist(product);
@@ -119,7 +127,7 @@ class HomeCubit extends Cubit<HomeStates> {
       syncProductsWithWishlist();
       emit(HomeAddToWishListSuccessState());
     });
-  }
+  } //toggleWishlist (add / remove from wishlist)
 
   Future<void> toggleCartlist(ProductModel product) async {
     final result = await _homeRepository.addToCart(product);
@@ -133,7 +141,7 @@ class HomeCubit extends Cubit<HomeStates> {
       }
       emit(HomeAddToCartSuccessState());
     });
-  }
+  } //toggleCartlist (add / remove from cart)
 
   Future<void> getWishlist() async {
     emit(GetWishlistLoading());
@@ -142,7 +150,7 @@ class HomeCubit extends Cubit<HomeStates> {
       wishList = data;
       emit(GetWishlistSuccess(data));
     });
-  }
+  } //getWishlist method
 
   void syncProductsWithWishlist() {
     final wishlistIds = wishList.map((item) => item.id).toSet();
@@ -154,5 +162,5 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     }).toList();
     emit(HomeGetProductsSuccessState(productsList));
-  }
+  } //syncProductsWithWishlist method
 }
