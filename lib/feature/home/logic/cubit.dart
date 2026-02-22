@@ -2,9 +2,9 @@ import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
+import 'package:e_commerce/feature/home/presentation/cart/cart_screen.dart';
 import 'package:e_commerce/feature/home/presentation/home/home_screen.dart';
 import 'package:e_commerce/feature/home/presentation/wish_list/wishlist_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,9 +19,14 @@ class HomeCubit extends Cubit<HomeStates> {
   List<ProductModel> productsList = [];
   List<String> categoriesList = ['All'];
   List<ProductModel> wishList = [];
+  List<ProductModel> cartList = [];
   int currentCategoryIndex = 0;
 
-  List<Widget> get pages => [HomePage(userModel: userModel), WishlistPage()];
+  List<Widget> get pages => [
+    HomePage(userModel: userModel),
+    const WishlistPage(),
+    const CartPage(),
+  ];
   int navBarCurrentIndex = 0;
 
   void changeNavBarIndex(int index) {
@@ -32,7 +37,7 @@ class HomeCubit extends Cubit<HomeStates> {
   Future<void> getAllHomeData() async {
     emit(HomeGetProductsLoadingState());
 
-    await Future.wait([getProducts(), getWishlist()]);
+    await Future.wait([getProducts(), getWishlist(), getCart()]);
 
     syncProductsWithWishlist();
   }
@@ -53,6 +58,13 @@ class HomeCubit extends Cubit<HomeStates> {
         .toSet()
         .toList();
     categoriesList.addAll(categories);
+  }
+
+  Future<void> getCart() async {
+    final products = await _homeRepository.getCart();
+    products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
+      cartList = products;
+    });
   }
 
   void selectCategory(int index) {
@@ -105,6 +117,20 @@ class HomeCubit extends Cubit<HomeStates> {
       }
       syncProductsWithWishlist();
       emit(HomeAddToWishListSuccessState());
+    });
+  }
+
+  Future<void> toggleCartlist(ProductModel product) async {
+    final result = await _homeRepository.addToCart(product);
+
+    result.fold((error) => emit(HomeAddToCartErrorState(error)), (success) {
+      if (cartList.any((element) => element.id == product.id)) {
+        cartList.removeWhere((element) => element.id == product.id);
+        _homeRepository.deleteFromCart(product.id);
+      } else {
+        wishList.add(product);
+      }
+      emit(HomeAddToCartSuccessState());
     });
   }
 

@@ -13,8 +13,9 @@ abstract class HomeRemoteDataSource {
   Future<void> addToWishlist(ProductModel product);
   Future<void> deleteFromWishList(int productId);
   Future<List<ProductModel>> getWishlist();
-  Future<Response> getCart();
+  Future<List<ProductModel>> getCart();
   Future<void> addToCart(ProductModel product);
+  Future<void> deleteFromCart(int productId);
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -55,9 +56,19 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<Response> getCart() {
-    // TODO: implement getCart
-    throw UnimplementedError();
+  Future<List<ProductModel>> getCart() async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    final querySnapshot = await _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.cartCollectionName)
+        .get();
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromJson(doc.data()))
+        .toList();
   }
 
   @override
@@ -86,6 +97,20 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.wishlistCollectionName)
+        .doc(productId.toString())
+        .delete();
+  }
+
+  @override
+  Future<void> deleteFromCart(int productId) async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    await _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.cartCollectionName)
         .doc(productId.toString())
         .delete();
   }
