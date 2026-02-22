@@ -1,4 +1,4 @@
-import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/feature/home/data/models/product_model.dart';
 
 abstract class HomeStates {}
 

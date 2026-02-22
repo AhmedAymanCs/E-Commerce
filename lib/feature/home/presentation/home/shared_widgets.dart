@@ -1,6 +1,6 @@
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
-import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/feature/home/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
