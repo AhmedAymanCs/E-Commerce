@@ -126,6 +126,7 @@ class BottomButton extends StatelessWidget {
       padding: EdgeInsets.all(12.w),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          minimumSize: Size(double.infinity, 50.h),
           backgroundColor: ColorManager.primaryColor,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.button),
         ),
