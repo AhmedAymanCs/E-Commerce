@@ -44,13 +44,11 @@ class ProductCardItem extends StatelessWidget {
   ProductModel product;
   final VoidCallback? onPressed;
   final VoidCallback? onTapWishlist;
-  final VoidCallback? addToCartPreessed;
   ProductCardItem({
     super.key,
     required this.product,
     this.onPressed,
     this.onTapWishlist,
-    this.addToCartPreessed,
   });
 
   @override

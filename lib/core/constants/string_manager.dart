@@ -31,4 +31,6 @@ class StringManager {
   static const String search = 'Search';
   static const String searchHint = 'Search for products';
   static const String noProductsFound = 'No Products Found';
+  static const String productAddedToCart = 'Product added to cart';
+  static const String productNotAddedToCart = 'Product not added to cart';
 }
