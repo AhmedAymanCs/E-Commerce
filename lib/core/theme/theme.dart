@@ -14,7 +14,9 @@ class AppTheme {
         fontSize: 25,
         color: ColorManager.primaryColor,
       ),
+      scrolledUnderElevation: 0,
     ),
+    cardTheme: CardThemeData(color: ColorManager.white),
     textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: ColorManager.primaryColor,
     ),
@@ -29,6 +31,7 @@ class AppTheme {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: ColorManager.primaryColor,
+      backgroundColor: Colors.white,
     ),
   );
 }
