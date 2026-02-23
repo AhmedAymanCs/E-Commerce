@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
@@ -66,6 +67,7 @@ class HomePage extends StatelessWidget {
                   current is HomeGetProductsSuccessState;
             },
             builder: (context, state) {
+              final HomeCubit cubit = HomeCubit.get(context);
               if (state is HomeGetProductsErrorState) {
                 return Expanded(
                   child: Center(child: Text('Error : ${state.errorMessage}')),
@@ -89,9 +91,31 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ProductCardItem(
                         product: state.products[index],
-                        addToCartPreessed: () => HomeCubit.get(
-                          context,
-                        ).toggleWishlist(state.products[index]),
+                        onTapWishlist: () =>
+                            cubit.toggleWishlist(state.products[index]),
+                        onPressed: () {
+                          final currentProduct = state.products[index];
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppRadius.card,
+                              ),
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: SingleChildScrollView(
+                                  child: ProductDetailsDialogContent(
+                                    product: currentProduct,
+                                    onTapAddToCart: () =>
+                                        cubit.addToCart(currentProduct),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        addToCartPreessed: () =>
+                            cubit.addToCart(state.products[index]),
                       );
                     },
                   ),
