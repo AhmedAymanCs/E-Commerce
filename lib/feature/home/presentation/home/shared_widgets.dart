@@ -243,7 +243,6 @@ class _ProductDetailsDialogContentState
           ),
         ),
         SizedBox(height: 15.h),
-
         Text(
           widget.product.title,
           style: TextStyle(
@@ -263,6 +262,15 @@ class _ProductDetailsDialogContentState
                 color: ColorManager.primaryColor,
               ),
             ),
+            Text(
+              "(${widget.product.category.toUpperCase()})",
+              style: TextStyle(
+                fontSize: FontSize.s12,
+                fontWeight: FontWeightManager.semiBold,
+                color: ColorManager.gray500,
+              ),
+            ),
+
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
               decoration: BoxDecoration(
@@ -357,7 +365,7 @@ class BuildDot extends StatelessWidget {
       height: 6.h,
       width: isActive ? 20.w : 8.w,
       decoration: BoxDecoration(
-        color: isActive ? Colors.blue : Colors.grey[300],
+        color: isActive ? ColorManager.primaryColor : ColorManager.gray300,
         borderRadius: BorderRadius.circular(10),
       ),
     );

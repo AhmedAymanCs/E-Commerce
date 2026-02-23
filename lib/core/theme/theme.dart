@@ -20,6 +20,7 @@ class AppTheme {
     textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: ColorManager.primaryColor,
     ),
+    dialogTheme: DialogThemeData(backgroundColor: Colors.white),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: ColorManager.primaryColor,
