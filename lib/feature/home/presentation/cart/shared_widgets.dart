@@ -60,7 +60,10 @@ class CartItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Subtotal"),
+                Text(
+                  "Subtotal :",
+                  style: TextStyle(fontWeight: FontWeightManager.semiBold),
+                ),
                 Text(
                   "\$${product.price * quantity}",
                   style: TextStyle(fontWeight: FontWeightManager.bold),
@@ -94,9 +97,9 @@ class OrderSummary extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          SummaryRow(label: "Subtotal", value: subtotal.toString()),
-          SummaryRow(label: "Discount (10%)", value: discount.toString()),
-          SummaryRow(label: "Tax (8%)", value: tax.toString()),
+          SummaryRow(label: "Subtotal :", value: subtotal.toString()),
+          SummaryRow(label: "Discount :", value: discount.toString()),
+          SummaryRow(label: "Tax (14%) :", value: tax.toString()),
           const Divider(),
           SummaryRow(label: "Total", value: total.toString(), isBold: true),
         ],

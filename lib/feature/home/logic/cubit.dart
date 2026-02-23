@@ -86,9 +86,8 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     }).toList();
     emit(HomeGetProductsSuccessState(products));
-  }
+  } //filterProducts method by category
 
-  //filterProducts method by category
   void searchProducts(String text) {
     emit(HomeGetProductsLoadingState());
     final products = productsList.where((product) {
