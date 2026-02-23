@@ -11,6 +11,7 @@ abstract class HomeRepository {
   ServerResponse<List<ProductModel>> getWishList();
   ServerResponse<List<ProductModel>> getCart();
   ServerResponse<void> deleteFromCart(int productId);
+  ServerResponse<void> updateQuantityInCart(int productId, int quantity);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -90,6 +91,16 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final wishlist = await _homeRemoteDataSource.getCart();
       return Right(wishlist);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> updateQuantityInCart(int productId, int quantity) async {
+    try {
+      await _homeRemoteDataSource.updateQuantityInCart(productId, quantity);
+      return const Right(null);
     } catch (e) {
       return Left(e.toString());
     }
