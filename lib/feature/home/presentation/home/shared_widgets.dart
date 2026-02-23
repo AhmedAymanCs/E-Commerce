@@ -27,7 +27,7 @@ class CategoryCard extends StatelessWidget {
           color: isSelected ? ColorManager.primaryColor : Colors.white,
         ),
         child: Text(
-          title,
+          title.toUpperCase(),
           style: TextStyle(
             color: isSelected ? Colors.white : ColorManager.gray500,
             fontWeight: FontWeightManager.semiBold,

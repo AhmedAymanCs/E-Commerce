@@ -13,7 +13,7 @@ class CartPage extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeStates>(
       builder: (context, state) {
         final HomeCubit cubit = HomeCubit.get(context);
-        if (cubit.wishList.isEmpty) {
+        if (cubit.cartList.isEmpty) {
           return const Center(child: Text("No Cart List"));
         }
         return Column(
