@@ -13,6 +13,9 @@ class WishlistPage extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeStates>(
       builder: (context, state) {
         final HomeCubit cubit = HomeCubit.get(context);
+        if (cubit.wishList.isEmpty) {
+          return const Center(child: Text("No Wish List"));
+        }
         return Column(
           children: [
             Expanded(
