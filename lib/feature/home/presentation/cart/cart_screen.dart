@@ -20,8 +20,12 @@ class CartPage extends StatelessWidget {
                 padding: EdgeInsets.all(12.w),
                 itemCount: cubit.cartList.length,
                 separatorBuilder: (_, _) => SizedBox(height: 12.h),
-                itemBuilder: (context, index) =>
-                    CartItem(product: cubit.cartList[index], quantity: 1),
+                itemBuilder: (context, index) => CartItem(
+                  product: cubit.cartList[index],
+                  quantity: 1,
+                  deleteOnPressed: () =>
+                      cubit.deleteCartlist(cubit.cartList[index].id),
+                ),
               ),
             ),
             OrderSummary(

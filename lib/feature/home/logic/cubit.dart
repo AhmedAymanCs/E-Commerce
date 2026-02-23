@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/utils/extensions.dart';
 import 'package:e_commerce/feature/home/data/models/cart_model.dart';
 import 'package:e_commerce/feature/home/data/models/product_model.dart';
 import 'package:e_commerce/core/models/user_model.dart';
@@ -142,30 +143,43 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> addToCart(ProductModel product) async {
     final cart = await _homeRepository.addToCart(product);
+    cartList.add(product);
     cart.fold(
       (r) => emit(HomeAddToCartErrorState(r)),
       (l) => emit(HomeAddToCartSuccessState()),
     );
   } //addToCart method
 
-  Future<void> toggleCartlist(ProductModel product) async {
-    final result = await _homeRepository.addToCart(product);
-
-    result.fold((error) => emit(HomeAddToCartErrorState(error)), (success) {
-      if (cartList.any((element) => element.id == product.id)) {
-        cartList.removeWhere((element) => element.id == product.id);
-        _homeRepository.deleteFromCart(product.id);
-      } else {
-        wishList.add(product);
-      }
-      emit(HomeAddToCartSuccessState());
+  Future<void> deleteCartlist(int productId) async {
+    final cart = await _homeRepository.deleteFromCart(productId);
+    cart.fold((r) => emit(HomeDeleteCartErrorState(r)), (l) {
+      cartList.removeWhere((element) => element.id == productId);
+      calculateCartModel();
+      emit(HomeDeleteCartSuccessState());
     });
-  } //toggleCartlist (add / remove from cart)
+  } //deleteCartlist method
 
   Future<void> getCart() async {
     final products = await _homeRepository.getCart();
     products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
       cartList = products;
     });
+    calculateCartModel();
   } //getCart method
+
+  void calculateCartModel() {
+    final double subTotal = cartList.fold(
+      0,
+      (previousValue, product) => previousValue + product.price,
+    );
+    final double tax = subTotal * 0.14;
+    final double discount = 0;
+    final double total = subTotal + tax - discount;
+    cartModel = CartModel(
+      discount: 0,
+      subtotal: subTotal.roundToTwo(),
+      tax: tax.roundToTwo(),
+      total: total.roundToTwo(),
+    );
+  }
 }

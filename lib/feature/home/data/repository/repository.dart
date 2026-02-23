@@ -78,7 +78,7 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   ServerResponse<void> deleteFromCart(int productId) async {
     try {
-      await _homeRemoteDataSource.deleteFromWishList(productId);
+      await _homeRemoteDataSource.deleteFromCart(productId);
       return const Right(null);
     } catch (e) {
       return Left(e.toString());

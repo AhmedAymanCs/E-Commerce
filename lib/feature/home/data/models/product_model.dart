@@ -6,7 +6,6 @@ class ProductModel {
   final String availabilityStatus;
   final List<String> images;
   final double price;
-  final double discountPercentage;
   final int stock;
   final bool isFavorite;
 
@@ -18,7 +17,6 @@ class ProductModel {
     required this.description,
     required this.category,
     required this.availabilityStatus,
-    required this.discountPercentage,
     required this.stock,
     this.isFavorite = false,
   });
@@ -36,7 +34,6 @@ class ProductModel {
       description: json['description'] ?? '',
       category: json['category'] ?? '',
       availabilityStatus: json['availabilityStatus'] ?? '',
-      discountPercentage: (json['discountPercentage'] as num).toDouble(),
       stock: json['stock'] ?? 0,
     );
   }
@@ -50,7 +47,6 @@ class ProductModel {
       'description': description,
       'category': category,
       'availabilityStatus': availabilityStatus,
-      'discountPercentage': discountPercentage,
       'stock': stock,
     };
   }
@@ -75,7 +71,6 @@ class ProductModel {
       availabilityStatus: availabilityStatus ?? this.availabilityStatus,
       images: images ?? this.images,
       price: price ?? this.price,
-      discountPercentage: discountPercentage ?? this.discountPercentage,
       stock: stock ?? this.stock,
       isFavorite: isFavorite ?? this.isFavorite,
     );

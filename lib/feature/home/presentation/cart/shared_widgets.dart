@@ -8,7 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CartItem extends StatelessWidget {
   final ProductModel product;
   final int quantity;
-  const CartItem({super.key, required this.product, required this.quantity});
+  final VoidCallback? deleteOnPressed;
+  const CartItem({
+    super.key,
+    required this.product,
+    required this.quantity,
+    this.deleteOnPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,10 @@ class CartItem extends StatelessWidget {
                           ),
                           QuantityBtn(icon: Icons.add, onTap: () {}),
                           const Spacer(),
-                          const Icon(Icons.delete_outline, color: Colors.red),
+                          IconButton(
+                            icon: Icon(Icons.delete_outline, color: Colors.red),
+                            onPressed: deleteOnPressed,
+                          ),
                         ],
                       ),
                     ],

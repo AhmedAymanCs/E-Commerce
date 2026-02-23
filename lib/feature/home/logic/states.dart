@@ -45,3 +45,11 @@ class GetWishlistError extends HomeStates {
   final String message;
   GetWishlistError(this.message);
 }
+
+class HomeDeleteCartSuccessState extends HomeStates {}
+
+class HomeDeleteCartErrorState extends HomeStates {
+  final String message;
+
+  HomeDeleteCartErrorState(this.message);
+}
