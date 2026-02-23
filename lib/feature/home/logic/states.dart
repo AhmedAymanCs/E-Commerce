@@ -53,3 +53,11 @@ class HomeDeleteCartErrorState extends HomeStates {
 
   HomeDeleteCartErrorState(this.message);
 }
+
+class HomeUpdateQuantityInCartSuccessState extends HomeStates {}
+
+class HomeUpdateQuantityInCartErrorState extends HomeStates {
+  final String message;
+
+  HomeUpdateQuantityInCartErrorState(this.message);
+}

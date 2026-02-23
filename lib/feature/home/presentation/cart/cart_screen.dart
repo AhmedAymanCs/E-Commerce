@@ -24,6 +24,15 @@ class CartPage extends StatelessWidget {
                   product: cubit.cartList[index],
                   deleteOnPressed: () =>
                       cubit.deleteCartlist(cubit.cartList[index].id),
+                  addQuantityOnPressed: () => cubit.updateQuantityInCart(
+                    productId: cubit.cartList[index].id,
+                    quantity: cubit.cartList[index].quantity,
+                  ),
+                  removeQuantityOnPressed: () => cubit.updateQuantityInCart(
+                    productId: cubit.cartList[index].id,
+                    quantity: cubit.cartList[index].quantity,
+                    addQuantity: false,
+                  ),
                 ),
               ),
             ),

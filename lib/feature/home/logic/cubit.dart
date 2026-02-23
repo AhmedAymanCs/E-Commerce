@@ -145,7 +145,11 @@ class HomeCubit extends Cubit<HomeStates> {
     int index = cartList.indexWhere((element) => element.id == product.id);
 
     if (index != -1) {
-      //TODO: update cart quantity
+      updateQuantityInCart(
+        productId: product.id,
+        quantity: product.quantity,
+        addQuantity: true,
+      );
     } else {
       cartList.add(product);
     }
@@ -158,7 +162,11 @@ class HomeCubit extends Cubit<HomeStates> {
   Future<void> deleteCartlist(int productId) async {
     final cart = await _homeRepository.deleteFromCart(productId);
     cart.fold((r) => emit(HomeDeleteCartErrorState(r)), (l) {
-      cartList.removeWhere((element) => element.id == productId);
+      final itemIndex = cartList.indexWhere((e) => e.id == productId);
+      if (itemIndex != -1) {
+        cartList[itemIndex].quantity = 1;
+        cartList.removeAt(itemIndex);
+      }
       calculateCartModel();
       emit(HomeDeleteCartSuccessState());
     });
@@ -176,7 +184,8 @@ class HomeCubit extends Cubit<HomeStates> {
   void calculateCartModel() {
     final double subTotal = cartList.fold(
       0,
-      (previousValue, product) => previousValue + product.price,
+      (previousValue, product) =>
+          (previousValue + product.price) * product.quantity,
     );
     final double tax = subTotal * 0.14;
     final double discount = 0;
@@ -187,5 +196,25 @@ class HomeCubit extends Cubit<HomeStates> {
       tax: tax.roundToTwo(),
       total: total.roundToTwo(),
     );
+  }
+
+  Future<void> updateQuantityInCart({
+    required int productId,
+    required int quantity,
+    bool addQuantity = true,
+  }) async {
+    if (quantity >= 1) {
+      addQuantity ? quantity++ : quantity--;
+      final product = await _homeRepository.updateQuantityInCart(
+        productId,
+        quantity,
+      );
+      int index = cartList.indexWhere((element) => element.id == productId);
+      product.fold((e) => emit(HomeUpdateQuantityInCartErrorState(e)), (l) {
+        cartList[index].quantity = quantity;
+        calculateCartModel();
+        emit(HomeUpdateQuantityInCartSuccessState());
+      });
+    }
   }
 }

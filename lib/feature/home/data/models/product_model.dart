@@ -7,8 +7,8 @@ class ProductModel {
   final List<String> images;
   final double price;
   final int stock;
-  final int quantity;
   final bool isFavorite;
+  int quantity;
 
   ProductModel({
     required this.id,
