@@ -143,11 +143,17 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> addToCart(ProductModel product) async {
     final cart = await _homeRepository.addToCart(product);
-    cartList.add(product);
-    cart.fold(
-      (r) => emit(HomeAddToCartErrorState(r)),
-      (l) => emit(HomeAddToCartSuccessState()),
-    );
+    int index = cartList.indexWhere((element) => element.id == product.id);
+
+    if (index != -1) {
+      //TODO: update cart quantity
+    } else {
+      cartList.add(product);
+    }
+    cart.fold((r) => emit(HomeAddToCartErrorState(r)), (l) {
+      calculateCartModel();
+      emit(HomeAddToCartSuccessState());
+    });
   } //addToCart method
 
   Future<void> deleteCartlist(int productId) async {
@@ -164,6 +170,7 @@ class HomeCubit extends Cubit<HomeStates> {
     products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
       cartList = products;
     });
+
     calculateCartModel();
   } //getCart method
 
