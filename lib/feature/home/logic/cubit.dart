@@ -217,4 +217,12 @@ class HomeCubit extends Cubit<HomeStates> {
       });
     }
   }
+
+  Future<void> makePayment(double amount, String currency) async {
+    final payment = await _homeRepository.makePayment(amount, currency);
+    payment.fold(
+      (error) => emit(HomeMakePaymentErrorState(error)),
+      (success) => emit(HomeMakePaymentSuccessState()),
+    );
+  }
 }

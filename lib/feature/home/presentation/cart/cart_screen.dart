@@ -45,7 +45,10 @@ class CartPage extends StatelessWidget {
               tax: cubit.cartModel.tax,
               total: cubit.cartModel.total,
             ),
-            BottomButton(text: "Checkout", onPressed: () {}),
+            BottomButton(
+              text: "Checkout",
+              onPressed: () => cubit.makePayment(cubit.cartModel.total, "USD"),
+            ),
           ],
         );
       },

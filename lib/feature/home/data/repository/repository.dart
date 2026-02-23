@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:e_commerce/core/stripe_payment/payment_manager.dart';
 import 'package:e_commerce/feature/home/data/models/product_model.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
@@ -12,6 +13,7 @@ abstract class HomeRepository {
   ServerResponse<List<ProductModel>> getCart();
   ServerResponse<void> deleteFromCart(int productId);
   ServerResponse<void> updateQuantityInCart(int productId, int quantity);
+  ServerResponse<void> makePayment(double amount, String currency);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -100,6 +102,16 @@ class HomeRepositoryImpl implements HomeRepository {
   ServerResponse<void> updateQuantityInCart(int productId, int quantity) async {
     try {
       await _homeRemoteDataSource.updateQuantityInCart(productId, quantity);
+      return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> makePayment(double amount, String currency) async {
+    try {
+      await PaymentManager.makePayment(amount, currency);
       return const Right(null);
     } catch (e) {
       return Left(e.toString());

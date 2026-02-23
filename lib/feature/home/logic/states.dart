@@ -54,7 +54,14 @@ class HomeDeleteCartErrorState extends HomeStates {
   HomeDeleteCartErrorState(this.message);
 }
 
+class HomeMakePaymentSuccessState extends HomeStates {}
+
 class HomeUpdateQuantityInCartSuccessState extends HomeStates {}
+
+class HomeMakePaymentErrorState extends HomeStates {
+  final String message;
+  HomeMakePaymentErrorState(this.message);
+}
 
 class HomeUpdateQuantityInCartErrorState extends HomeStates {
   final String message;

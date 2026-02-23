@@ -1,19 +1,25 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/stripe_payment/stripe_keys.dart';
+import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 abstract class PaymentManager {
-  static Future<void> makePayment(int amount, String currency) async {
+  static ServerResponse<void> makePayment(
+    double amount,
+    String currency,
+  ) async {
     try {
       String clientSecret = await _getClientSecret(
-        (amount * 100).toString(),
+        (amount * 100).toInt().toString(),
         currency,
       );
       await _initializePaymentSheet(clientSecret);
       await Stripe.instance.presentPaymentSheet();
-    } catch (error) {
-      throw Exception(error.toString());
+      return const Right(null);
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 
@@ -21,7 +27,7 @@ abstract class PaymentManager {
     await Stripe.instance.initPaymentSheet(
       paymentSheetParameters: SetupPaymentSheetParameters(
         paymentIntentClientSecret: clientSecret,
-        merchantDisplayName: "Ahmed Lavalon",
+        merchantDisplayName: "E-Market",
       ),
     );
   }
