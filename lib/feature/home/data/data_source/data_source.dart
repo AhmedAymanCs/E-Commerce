@@ -16,6 +16,7 @@ abstract class HomeRemoteDataSource {
   Future<List<ProductModel>> getCart();
   Future<void> addToCart(ProductModel product);
   Future<void> deleteFromCart(int productId);
+  Future<void> updateQuantityInCart(int productId, int quantity);
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -113,5 +114,19 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .collection(AppConstants.cartCollectionName)
         .doc(productId.toString())
         .delete();
+  }
+
+  @override
+  Future<void> updateQuantityInCart(int productId, int quantity) async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.cartCollectionName)
+        .doc(productId.toString())
+        .update({'quantity': quantity});
   }
 }

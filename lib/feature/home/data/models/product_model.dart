@@ -7,6 +7,7 @@ class ProductModel {
   final List<String> images;
   final double price;
   final int stock;
+  final int quantity;
   final bool isFavorite;
 
   ProductModel({
@@ -19,6 +20,7 @@ class ProductModel {
     required this.availabilityStatus,
     required this.stock,
     this.isFavorite = false,
+    this.quantity = 1,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class ProductModel {
       category: json['category'] ?? '',
       availabilityStatus: json['availabilityStatus'] ?? '',
       stock: json['stock'] ?? 0,
+      quantity: json['quantity'] ?? 1,
     );
   }
 
@@ -48,6 +51,7 @@ class ProductModel {
       'category': category,
       'availabilityStatus': availabilityStatus,
       'stock': stock,
+      'quantity': quantity,
     };
   }
 

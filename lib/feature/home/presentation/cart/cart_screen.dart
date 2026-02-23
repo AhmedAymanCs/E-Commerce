@@ -22,7 +22,6 @@ class CartPage extends StatelessWidget {
                 separatorBuilder: (_, _) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) => CartItem(
                   product: cubit.cartList[index],
-                  quantity: 1,
                   deleteOnPressed: () =>
                       cubit.deleteCartlist(cubit.cartList[index].id),
                 ),

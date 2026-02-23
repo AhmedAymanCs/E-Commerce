@@ -7,13 +7,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartItem extends StatelessWidget {
   final ProductModel product;
-  final int quantity;
   final VoidCallback? deleteOnPressed;
+  final VoidCallback? addQuantityOnPressed;
+  final VoidCallback? removeQuantityOnPressed;
   const CartItem({
     super.key,
     required this.product,
-    required this.quantity,
     this.deleteOnPressed,
+    this.addQuantityOnPressed,
+    this.removeQuantityOnPressed,
   });
 
   @override
@@ -38,12 +40,18 @@ class CartItem extends StatelessWidget {
                       Text(product.price.toString()),
                       Row(
                         children: [
-                          QuantityBtn(icon: Icons.remove, onTap: () {}),
+                          QuantityBtn(
+                            icon: Icons.remove,
+                            onTap: removeQuantityOnPressed,
+                          ), //Remove Quantity Button
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            child: Text(quantity.toString()),
+                            child: Text(product.quantity.toString()),
                           ),
-                          QuantityBtn(icon: Icons.add, onTap: () {}),
+                          QuantityBtn(
+                            icon: Icons.add,
+                            onTap: addQuantityOnPressed,
+                          ), //Add Quantity Button
                           const Spacer(),
                           IconButton(
                             icon: Icon(Icons.delete_outline, color: Colors.red),
@@ -65,7 +73,7 @@ class CartItem extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeightManager.semiBold),
                 ),
                 Text(
-                  "\$${product.price * quantity}",
+                  "\$${product.price * product.quantity}",
                   style: TextStyle(fontWeight: FontWeightManager.bold),
                 ),
               ],
