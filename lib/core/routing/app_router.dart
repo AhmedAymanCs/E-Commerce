@@ -3,6 +3,7 @@ import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/auth/forget_passoword/presentation/forget_password_screen.dart';
 import 'package:e_commerce/feature/auth/login/presentation/login_screen.dart';
 import 'package:e_commerce/feature/auth/register/presentation/register_screen.dart';
+import 'package:e_commerce/feature/checkout/presentation/checkout_screen.dart';
 import 'package:e_commerce/feature/home/presentation/layout.dart';
 import 'package:e_commerce/feature/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,11 @@ class AppRouter {
         final arg = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => Layout(userModel: arg as UserModel),
+        );
+      case Routes.checkoutRoute:
+        final arg = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => CheckoutScreen(totalPrice: arg as double),
         );
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());

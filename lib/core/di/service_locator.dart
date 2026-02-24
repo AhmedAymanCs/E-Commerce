@@ -5,6 +5,8 @@ import 'package:e_commerce/core/database/remote/networking/dio_helper.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
+import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dart';
+import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,5 +62,12 @@ void setupFirestoreLocator() {
   );
   getIt.registerLazySingleton<HomeRepository>(
     () => HomeRepositoryImpl(getIt<HomeRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CheckoutRemoteDataSource>(
+    () => CheckoutRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<CheckoutRepo>(
+    () => CheckoutRepoImpl(getIt<CheckoutRemoteDataSource>()),
   );
 }

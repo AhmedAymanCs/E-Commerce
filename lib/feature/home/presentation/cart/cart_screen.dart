@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
 import 'package:e_commerce/feature/home/presentation/cart/shared_widgets.dart';
@@ -47,7 +48,11 @@ class CartPage extends StatelessWidget {
             ),
             BottomButton(
               text: "Checkout",
-              onPressed: () => cubit.makePayment(cubit.cartModel.total, "USD"),
+              onPressed: () => Navigator.pushNamed(
+                context,
+                Routes.checkoutRoute,
+                arguments: cubit.cartModel.total,
+              ),
             ),
           ],
         );
