@@ -1,9 +1,7 @@
 import 'package:e_commerce/core/constants/image_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
-import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/user_model.dart';
-import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
@@ -30,14 +28,7 @@ class Layout extends StatelessWidget {
               title: Text(StringManager.appName),
               actions: [
                 IconButton(
-                  onPressed: () {
-                    getIt<SecureStorageHelper>().clearAll();
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      Routes.loginRoute,
-                      (_) => false,
-                    );
-                  },
+                  onPressed: () => cubit.signOut(context),
                   icon: const Icon(Icons.logout),
                 ),
               ],

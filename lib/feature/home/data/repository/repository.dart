@@ -13,6 +13,7 @@ abstract class HomeRepository {
   ServerResponse<void> deleteFromCart(int productId);
   ServerResponse<void> clearCart();
   ServerResponse<void> updateQuantityInCart(int productId, int quantity);
+  Future<void> signOut();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -115,5 +116,10 @@ class HomeRepositoryImpl implements HomeRepository {
     } catch (e) {
       return Left(e.toString());
     }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await _homeRemoteDataSource.signOut();
   }
 }

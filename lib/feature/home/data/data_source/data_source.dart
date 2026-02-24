@@ -7,6 +7,7 @@ import 'package:e_commerce/core/database/remote/networking/api_constant.dart';
 import 'package:e_commerce/core/database/remote/networking/dio_helper.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/product_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class HomeRemoteDataSource {
   Future<Response> getProducts();
@@ -18,6 +19,7 @@ abstract class HomeRemoteDataSource {
   Future<void> deleteFromCart(int productId);
   Future<void> clearCart();
   Future<void> updateQuantityInCart(int productId, int quantity);
+  Future<void> signOut();
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -147,5 +149,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     for (var doc in snapshot.docs) {
       await doc.reference.delete();
     }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await getIt<FirebaseAuth>().signOut();
   }
 }
