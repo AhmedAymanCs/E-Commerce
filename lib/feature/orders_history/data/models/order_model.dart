@@ -20,7 +20,7 @@ class OrderModel {
           .map((e) => ProductModel.fromJson(e))
           .toList(),
       totalPrice: (json['totalPrice'] ?? 0).toDouble(),
-      date: DateTime.parse(json['date'] ?? ''),
+      date: DateTime.parse(json['orderDate'] ?? ''),
     );
   }
 }
