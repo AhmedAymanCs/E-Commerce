@@ -6,8 +6,6 @@ class UserModel {
   final String? name;
   final String? phone;
   final String? image;
-  final String? city;
-  final String? street;
 
   UserModel({
     required this.uId,
@@ -15,8 +13,6 @@ class UserModel {
     this.name,
     this.phone,
     this.image,
-    this.city,
-    this.street,
   });
   //from firebase
   factory UserModel.fromFirebaseUser(User user) {
@@ -36,8 +32,6 @@ class UserModel {
       name: json['name'],
       phone: json['phone'],
       image: json['image'],
-      city: json['city'],
-      street: json['street'],
     );
   }
 
@@ -49,8 +43,6 @@ class UserModel {
       'name': name,
       'phone': phone,
       'image': image,
-      'city': city,
-      'street': street,
     };
   }
 }

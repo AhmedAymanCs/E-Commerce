@@ -1,4 +1,3 @@
-import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/core/routing/routes.dart';
