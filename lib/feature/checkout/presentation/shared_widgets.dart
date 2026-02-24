@@ -11,21 +11,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /////////////////////step 1 - address /////////////////////
-class AddressStepWidget extends StatelessWidget {
+class AddressStepWidget extends StatefulWidget {
   const AddressStepWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final cityController = TextEditingController();
-    final streetController = TextEditingController();
-    final zipController = TextEditingController();
-    final phoneController = TextEditingController();
+  State<AddressStepWidget> createState() => _AddressStepWidgetState();
+}
 
+class _AddressStepWidgetState extends State<AddressStepWidget> {
+  final formKey = GlobalKey<FormState>();
+  late TextEditingController cityController;
+  late TextEditingController streetController;
+  late TextEditingController zipController;
+  late TextEditingController phoneController;
+  @override
+  void initState() {
+    cityController = TextEditingController();
+    streetController = TextEditingController();
+    zipController = TextEditingController();
+    phoneController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cityController.dispose();
+    streetController.dispose();
+    zipController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<CheckoutCubit, CheckoutStates>(
       builder: (context, state) {
-        var cubit = context.read<CheckoutCubit>();
-
+        CheckoutCubit cubit = CheckoutCubit.get(context);
         return Form(
           key: formKey,
           child: Column(
@@ -49,10 +70,25 @@ class AddressStepWidget extends StatelessWidget {
                 validator: (v) => v!.isEmpty ? "Required" : null,
               ),
               const SizedBox(height: 10),
-              CustomFormField(
-                controller: zipController,
-                hint: "Zip Code",
-                // type: TextInputType.number,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: CustomFormField(
+                      controller: phoneController,
+                      hint: "Phone",
+                      // type: TextInputType.number,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: CustomFormField(
+                      controller: zipController,
+                      hint: "Zip Code",
+                      // type: TextInputType.number,
+                    ),
+                  ),
+                ],
               ),
 
               const Padding(
@@ -94,6 +130,8 @@ class AddressStepWidget extends StatelessWidget {
                           cubit.selectAddress(val);
                           cityController.clear();
                           streetController.clear();
+                          zipController.clear();
+                          phoneController.clear();
                         }
                       },
                     );
@@ -116,7 +154,7 @@ class AddressStepWidget extends StatelessWidget {
                       );
                     }
                   },
-                  child: const Text("Save & Use This Address"),
+                  child: const Text("Save This Address"),
                 ),
             ],
           ),
