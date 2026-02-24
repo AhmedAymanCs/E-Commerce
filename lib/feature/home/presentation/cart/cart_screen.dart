@@ -57,7 +57,10 @@ class CartPage extends StatelessWidget {
               onPressed: () => Navigator.pushNamed(
                 context,
                 Routes.checkoutRoute,
-                arguments: cubit.cartModel.total,
+                arguments: {
+                  'totalPrice': cubit.cartModel.total,
+                  'cartList': cubit.cartList,
+                },
               ),
             ),
           ],

@@ -17,9 +17,12 @@ class AppRouter {
           builder: (_) => Layout(userModel: arg as UserModel),
         );
       case Routes.checkoutRoute:
-        final arg = settings.arguments;
+        final arg = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => CheckoutScreen(totalPrice: arg as double),
+          builder: (_) => CheckoutScreen(
+            totalPrice: arg['totalPrice'],
+            cartList: arg['cartList'],
+          ),
         );
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());

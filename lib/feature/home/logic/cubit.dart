@@ -1,11 +1,12 @@
 import 'package:e_commerce/core/utils/extensions.dart';
 import 'package:e_commerce/feature/home/data/models/cart_model.dart';
-import 'package:e_commerce/feature/home/data/models/product_model.dart';
+import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
 import 'package:e_commerce/feature/home/presentation/cart/cart_screen.dart';
 import 'package:e_commerce/feature/home/presentation/home/home_screen.dart';
+import 'package:e_commerce/feature/home/presentation/profile/profile_screen.dart';
 import 'package:e_commerce/feature/home/presentation/wish_list/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,7 @@ class HomeCubit extends Cubit<HomeStates> {
     HomePage(userModel: userModel),
     const WishlistPage(),
     const CartPage(),
+    const ProfilePage(),
   ]; //initialize bottom navigation bar pages
   int navBarCurrentIndex = 0; //initialize nav bar index
   CartModel cartModel = CartModel(

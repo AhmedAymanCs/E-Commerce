@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/core/stripe_payment/payment_manager.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dart';
@@ -12,6 +13,11 @@ abstract class CheckoutRepo {
     required AddressModel address,
   });
   ServerResponse<void> makePayment(double amount, String currency);
+  ServerResponse<void> addOrderHistory(
+    String userId,
+    List<ProductModel> products,
+    totalPrice,
+  );
 }
 
 class CheckoutRepoImpl implements CheckoutRepo {
@@ -45,5 +51,19 @@ class CheckoutRepoImpl implements CheckoutRepo {
   @override
   ServerResponse<void> makePayment(double amount, String currency) async {
     return await PaymentManager.makePayment(amount, currency);
+  }
+
+  @override
+  ServerResponse<void> addOrderHistory(
+    String userId,
+    List<ProductModel> products,
+    totalPrice,
+  ) async {
+    try {
+      await _remoteDataSource.addOrderHistory(userId, products, totalPrice);
+      return const Right(null);
+    } catch (error) {
+      return Left(error.toString());
+    }
   }
 }

@@ -32,3 +32,10 @@ class CheckoutMakePaymentErrorState extends CheckoutStates {
 }
 
 class CheckoutMakePaymentSuccessState extends CheckoutStates {}
+
+class CheckoutAddOrderHistorySuccessState extends CheckoutStates {}
+
+class CheckoutAddOrderHistoryErrorState extends CheckoutStates {
+  final String error;
+  CheckoutAddOrderHistoryErrorState(this.error);
+}

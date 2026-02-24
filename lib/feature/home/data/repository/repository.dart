@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:e_commerce/feature/home/data/models/product_model.dart';
+import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
 

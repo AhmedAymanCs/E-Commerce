@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
+import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/states.dart';
@@ -81,6 +82,18 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     payment.fold(
       (error) => emit(CheckoutMakePaymentErrorState(error)),
       (success) => emit(CheckoutMakePaymentSuccessState()),
+    );
+  }
+
+  Future<void> addOrderHistory(List<ProductModel> products, totalPrice) async {
+    final result = await _checkoutRepo.addOrderHistory(
+      userId,
+      products,
+      totalPrice,
+    );
+    result.fold(
+      (error) => emit(CheckoutAddOrderHistoryErrorState(error)),
+      (success) => emit(CheckoutAddOrderHistorySuccessState()),
     );
   }
 }

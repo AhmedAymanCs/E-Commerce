@@ -1,16 +1,21 @@
-import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
 import 'package:e_commerce/feature/checkout/logic/states.dart';
 import 'package:e_commerce/feature/checkout/presentation/shared_widgets.dart';
+import 'package:e_commerce/core/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CheckoutScreen extends StatelessWidget {
   final double totalPrice;
-  const CheckoutScreen({super.key, required this.totalPrice});
+  final List<ProductModel> cartList;
+  const CheckoutScreen({
+    super.key,
+    required this.totalPrice,
+    required this.cartList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +27,12 @@ class CheckoutScreen extends StatelessWidget {
         appBar: AppBar(title: const Text("Checkout")),
         body: BlocBuilder<CheckoutCubit, CheckoutStates>(
           builder: (context, state) {
-            if (state is CheckoutMakePaymentSuccessState) {
+            CheckoutCubit cubit = CheckoutCubit.get(context);
+            if (state is CheckoutAddOrderHistorySuccessState) {
               return const ConfirmedOrderView();
+            }
+            if (state is CheckoutMakePaymentSuccessState) {
+              cubit.addOrderHistory(cartList, totalPrice);
             }
             if (state is CheckoutMakePaymentErrorState) {
               Fluttertoast.showToast(
@@ -32,7 +41,6 @@ class CheckoutScreen extends StatelessWidget {
                 gravity: ToastGravity.BOTTOM,
               );
             }
-            CheckoutCubit cubit = CheckoutCubit.get(context);
             return Stepper(
               type: StepperType.vertical,
               currentStep: cubit.currentStep,

@@ -63,6 +63,10 @@ class Layout extends StatelessWidget {
                   icon: const Icon(Icons.shopping_cart),
                   label: StringManager.cart,
                 ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.person),
+                  label: StringManager.profile,
+                ),
               ],
               currentIndex: cubit.navBarCurrentIndex,
             ),
