@@ -5,6 +5,7 @@ import 'package:e_commerce/feature/auth/login/presentation/login_screen.dart';
 import 'package:e_commerce/feature/auth/register/presentation/register_screen.dart';
 import 'package:e_commerce/feature/checkout/presentation/checkout_screen.dart';
 import 'package:e_commerce/feature/home/presentation/layout.dart';
+import 'package:e_commerce/feature/orders_history/presentation/orders_history.dart';
 import 'package:e_commerce/feature/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,8 @@ class AppRouter {
             cartList: arg['cartList'],
           ),
         );
+      case Routes.ordersHistoryRoute:
+        return MaterialPageRoute(builder: (_) => const OrdersHistory());
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.loginRoute:
