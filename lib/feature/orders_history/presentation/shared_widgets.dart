@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class OrderHistoryList extends StatelessWidget {
-  List<OrderModel> orders;
-  OrderHistoryList({super.key, required this.orders});
+  final List<OrderModel> orders;
+  const OrderHistoryList({super.key, required this.orders});
 
   @override
   Widget build(BuildContext context) {
