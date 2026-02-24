@@ -56,6 +56,8 @@ class HomeDeleteCartErrorState extends HomeStates {
 
 class HomeMakePaymentSuccessState extends HomeStates {}
 
+class HomeClearCartSuccessState extends HomeStates {}
+
 class HomeUpdateQuantityInCartSuccessState extends HomeStates {}
 
 class HomeMakePaymentErrorState extends HomeStates {

@@ -119,7 +119,13 @@ class OrderSummary extends StatelessWidget {
 class BottomButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String text;
-  const BottomButton({super.key, required this.onPressed, required this.text});
+  final Color color;
+  const BottomButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    this.color = ColorManager.primaryColor,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -127,15 +133,16 @@ class BottomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           minimumSize: Size(double.infinity, 50.h),
-          backgroundColor: ColorManager.primaryColor,
+          backgroundColor: color,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.button),
         ),
         onPressed: onPressed,
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontSize: FontSize.s16,
+            fontWeight: FontWeightManager.semiBold,
           ),
         ),
       ),

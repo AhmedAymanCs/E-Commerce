@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
@@ -45,6 +46,11 @@ class CartPage extends StatelessWidget {
               subtotal: cubit.cartModel.subtotal,
               tax: cubit.cartModel.tax,
               total: cubit.cartModel.total,
+            ),
+            BottomButton(
+              text: "Clear Cart",
+              color: ColorManager.red,
+              onPressed: () => cubit.clearCart(),
             ),
             BottomButton(
               text: "Checkout",

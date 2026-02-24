@@ -68,6 +68,14 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     emit(CheckoutPaymentMethodSelected());
   }
 
+  Future<void> confirmOrder(double amount) async {
+    if (paymentMethod == 'Stripe') {
+      makePayment(amount, AppConstants.currency);
+    } else {
+      emit(CheckoutMakePaymentSuccessState());
+    }
+  }
+
   Future<void> makePayment(double amount, String currency) async {
     final payment = await _checkoutRepo.makePayment(amount, currency);
     payment.fold(

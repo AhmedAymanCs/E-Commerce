@@ -44,7 +44,7 @@ class CheckoutScreen extends StatelessWidget {
                 if (cubit.currentStep < 2) {
                   cubit.changeStep(cubit.currentStep + 1);
                 } else {
-                  //TODO: Confirm Order
+                  cubit.confirmOrder(totalPrice);
                 }
               },
               onStepCancel: () {
@@ -85,11 +85,7 @@ class CheckoutScreen extends StatelessWidget {
                 Step(
                   isActive: cubit.currentStep >= 2,
                   title: const Text("Summary"),
-                  content: SummaryStepWidget(
-                    totalPrice: totalPrice,
-                    onTapConfirm: () =>
-                        cubit.makePayment(totalPrice, AppConstants.currency),
-                  ),
+                  content: SummaryStepWidget(totalPrice: totalPrice),
                 ),
               ],
             );

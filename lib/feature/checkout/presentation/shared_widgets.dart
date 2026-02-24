@@ -254,12 +254,8 @@ class PaymentMethodTile extends StatelessWidget {
 
 class SummaryStepWidget extends StatelessWidget {
   final double totalPrice;
-  final VoidCallback? onTapConfirm;
-  const SummaryStepWidget({
-    super.key,
-    required this.totalPrice,
-    this.onTapConfirm,
-  });
+
+  const SummaryStepWidget({super.key, required this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +306,6 @@ class SummaryStepWidget extends StatelessWidget {
               price: "\$$totalPrice",
               isBold: true,
             ),
-
-            const SizedBox(height: 30),
-            ConfirmButton(state: state, onPressed: onTapConfirm),
           ],
         );
       },
@@ -413,46 +406,6 @@ class SummaryPriceRow extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ConfirmButton extends StatelessWidget {
-  final CheckoutStates state;
-  final VoidCallback? onPressed;
-
-  const ConfirmButton({super.key, required this.state, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorManager.primaryColor,
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.button),
-          elevation: 0,
-        ),
-        onPressed: state is PlaceOrderLoading ? null : onPressed,
-        child: state is PlaceOrderLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              )
-            : Text(
-                "Confirm & Place Order",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: FontSize.s16,
-                  fontWeight: FontWeightManager.semiBold,
-                ),
-              ),
       ),
     );
   }
