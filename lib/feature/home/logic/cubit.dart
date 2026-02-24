@@ -206,7 +206,11 @@ class HomeCubit extends Cubit<HomeStates> {
     bool addQuantity = true,
   }) async {
     if (quantity >= 1) {
-      addQuantity ? quantity++ : quantity--;
+      addQuantity
+          ? quantity++
+          : quantity == 1
+          ? quantity
+          : quantity--;
       final product = await _homeRepository.updateQuantityInCart(
         productId,
         quantity,
