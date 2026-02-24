@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     hint: StringManager.emailHint,
                     title: StringManager.email,
                     preicon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 15.h),
                   //Password field
@@ -71,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                         preicon: Icons.lock_outlined,
                         obscure: cubit.passwordObscure,
                         onPressed: cubit.changePasswordVisible,
+                        keyboardType: TextInputType.visiblePassword,
                       );
                     },
                   ),

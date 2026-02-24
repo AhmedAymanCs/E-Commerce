@@ -1,4 +1,3 @@
-import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';

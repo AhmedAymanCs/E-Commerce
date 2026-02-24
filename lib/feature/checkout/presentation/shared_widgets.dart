@@ -52,9 +52,12 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "Enter New Address",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeightManager.semiBold,
+                  fontSize: FontSize.s16,
+                ),
               ),
               const SizedBox(height: 10),
 
@@ -77,7 +80,7 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
                     child: CustomFormField(
                       controller: phoneController,
                       hint: "Phone",
-                      // type: TextInputType.number,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -85,7 +88,7 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
                     child: CustomFormField(
                       controller: zipController,
                       hint: "Zip Code",
-                      // type: TextInputType.number,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
                 ],
@@ -98,7 +101,10 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
 
               const Text(
                 "Or Select Saved Address",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeightManager.semiBold,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 10),
 
@@ -107,7 +113,7 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
               else if (cubit.savedAddresses.isEmpty)
                 const Text(
                   "No saved addresses yet.",
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: ColorManager.gray500),
                 )
               else
                 ListView.builder(

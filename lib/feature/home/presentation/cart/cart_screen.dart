@@ -41,26 +41,34 @@ class CartPage extends StatelessWidget {
                 ),
               ),
             ),
-            OrderSummary(
-              discount: cubit.cartModel.discount,
-              subtotal: cubit.cartModel.subtotal,
-              tax: cubit.cartModel.tax,
-              total: cubit.cartModel.total,
-            ),
-            BottomButton(
-              text: "Clear Cart",
-              color: ColorManager.red,
-              onPressed: () => cubit.clearCart(),
-            ),
-            BottomButton(
-              text: "Checkout",
-              onPressed: () => Navigator.pushNamed(
-                context,
-                Routes.checkoutRoute,
-                arguments: {
-                  'totalPrice': cubit.cartModel.total,
-                  'cartList': cubit.cartList,
-                },
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    OrderSummary(
+                      discount: cubit.cartModel.discount,
+                      subtotal: cubit.cartModel.subtotal,
+                      tax: cubit.cartModel.tax,
+                      total: cubit.cartModel.total,
+                    ),
+                    BottomButton(
+                      text: "Clear Cart",
+                      color: ColorManager.red,
+                      onPressed: () => cubit.clearCart(),
+                    ),
+                    BottomButton(
+                      text: "Checkout",
+                      onPressed: () => Navigator.pushNamed(
+                        context,
+                        Routes.checkoutRoute,
+                        arguments: {
+                          'totalPrice': cubit.cartModel.total,
+                          'cartList': cubit.cartList,
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
