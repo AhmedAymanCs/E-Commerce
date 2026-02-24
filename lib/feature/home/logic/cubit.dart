@@ -222,6 +222,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> clearCart() async {
     cartList.clear();
+    await _homeRepository.clearCart();
     cartModel = CartModel(discount: 0, subtotal: 0, tax: 0, total: 0);
     emit(HomeClearCartSuccessState());
   }

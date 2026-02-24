@@ -16,6 +16,7 @@ abstract class HomeRemoteDataSource {
   Future<List<ProductModel>> getCart();
   Future<void> addToCart(ProductModel product);
   Future<void> deleteFromCart(int productId);
+  Future<void> clearCart();
   Future<void> updateQuantityInCart(int productId, int quantity);
 }
 
@@ -128,5 +129,23 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .collection(AppConstants.cartCollectionName)
         .doc(productId.toString())
         .update({'quantity': quantity});
+  }
+
+  @override
+  Future<void> clearCart() async {
+    final userSession = await getIt<SecureStorageHelper>().getData(
+      key: AppConstants.userSession,
+    );
+    final userId = jsonDecode(userSession!)['uId'];
+    final cartCollection = _firestore
+        .collection(AppConstants.usersCollectionName)
+        .doc(userId)
+        .collection(AppConstants.cartCollectionName);
+
+    final snapshot = await cartCollection.get();
+
+    for (var doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
   }
 }
