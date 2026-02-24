@@ -9,6 +9,8 @@ import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dar
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
+import 'package:e_commerce/feature/orders_history/data/data_source/data_source.dart';
+import 'package:e_commerce/feature/orders_history/data/repository/repositroy.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -69,5 +71,11 @@ void setupFirestoreLocator() {
   );
   getIt.registerLazySingleton<CheckoutRepo>(
     () => CheckoutRepoImpl(getIt<CheckoutRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<OrdersHistoryRemoteDataSource>(
+    () => OrdersHistoryRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<OrdersHistoryRepository>(
+    () => OrdersHistoryRepositoryImpl(getIt<OrdersHistoryRemoteDataSource>()),
   );
 }
