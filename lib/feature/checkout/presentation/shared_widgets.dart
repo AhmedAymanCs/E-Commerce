@@ -1,6 +1,7 @@
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
+import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+/////////////////////step 1 - address /////////////////////
 class AddressStepWidget extends StatelessWidget {
   const AddressStepWidget({super.key});
 
@@ -124,6 +126,7 @@ class AddressStepWidget extends StatelessWidget {
   }
 }
 
+/////////////////////step 2 - payment /////////////////////
 class PaymentStepWidget extends StatelessWidget {
   final double totalAmount;
   const PaymentStepWidget({super.key, required this.totalAmount});
@@ -132,8 +135,7 @@ class PaymentStepWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CheckoutCubit, CheckoutStates>(
       builder: (context, state) {
-        var cubit = context.read<CheckoutCubit>();
-
+        CheckoutCubit cubit = CheckoutCubit.get(context);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -166,7 +168,7 @@ class PaymentStepWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: ColorManager.gray300,
+                color: ColorManager.gray200,
                 borderRadius: AppRadius.button,
               ),
               child: Row(
@@ -244,6 +246,76 @@ class PaymentMethodTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/////////////////////step 3 - summary /////////////////////
+
+class SummaryStepWidget extends StatelessWidget {
+  final double totalPrice;
+  final VoidCallback? onTapConfirm;
+  const SummaryStepWidget({
+    super.key,
+    required this.totalPrice,
+    this.onTapConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CheckoutCubit, CheckoutStates>(
+      builder: (context, state) {
+        final cubit = CheckoutCubit.get(context);
+        final address = cubit.selectedAddress;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Order Summary",
+              style: TextStyle(
+                fontWeight: FontWeightManager.semiBold,
+                fontSize: FontSize.s18,
+              ),
+            ),
+            SizedBox(height: 15.h),
+
+            SummaryInfoCard(
+              title: "Shipping Address",
+              icon: Icons.location_on_outlined,
+              content:
+                  "${address?.street}, ${address?.city}\nPhone: ${address?.phone}",
+            ),
+
+            SizedBox(height: 12.h),
+
+            SummaryInfoCard(
+              title: "Payment Method",
+              icon: Icons.payment_outlined,
+              content: cubit.paymentMethod == 'Stripe'
+                  ? "Credit Card"
+                  : "Cash on Delivery",
+            ),
+
+            SizedBox(height: 24.h),
+            const Divider(),
+            SummaryPriceRow(label: "Subtotal", price: "\$$totalPrice"),
+            const SummaryPriceRow(
+              label: "Shipping Fee",
+              price: "Free",
+              isGreen: true,
+            ),
+            Divider(height: 30.h),
+            SummaryPriceRow(
+              label: "Total Amount",
+              price: "\$$totalPrice",
+              isBold: true,
+            ),
+
+            const SizedBox(height: 30),
+            ConfirmButton(state: state, onPressed: onTapConfirm),
+          ],
+        );
+      },
     );
   }
 }
@@ -346,76 +418,6 @@ class SummaryPriceRow extends StatelessWidget {
   }
 }
 
-class SummaryStepWidget extends StatelessWidget {
-  final double totalPrice;
-  final VoidCallback? onTapConfirm;
-  const SummaryStepWidget({
-    super.key,
-    required this.totalPrice,
-    this.onTapConfirm,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CheckoutCubit, CheckoutStates>(
-      builder: (context, state) {
-        final cubit = CheckoutCubit.get(context);
-        final address = cubit.selectedAddress;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Order Summary",
-              style: TextStyle(
-                fontWeight: FontWeightManager.semiBold,
-                fontSize: FontSize.s18,
-              ),
-            ),
-            SizedBox(height: 15.h),
-
-            SummaryInfoCard(
-              title: "Shipping Address",
-              icon: Icons.location_on_outlined,
-              content:
-                  "${address?.street}, ${address?.city}\nPhone: ${address?.phone}",
-            ),
-
-            SizedBox(height: 12.h),
-
-            SummaryInfoCard(
-              title: "Payment Method",
-              icon: Icons.payment_outlined,
-              content: cubit.paymentMethod == 'Stripe'
-                  ? "Credit Card"
-                  : "Cash on Delivery",
-            ),
-
-            SizedBox(height: 24.h),
-            const Divider(),
-            SummaryPriceRow(label: "Subtotal", price: "\$$totalPrice"),
-            const SummaryPriceRow(
-              label: "Shipping Fee",
-              price: "Free",
-              isGreen: true,
-            ),
-            Divider(height: 30.h),
-            SummaryPriceRow(
-              label: "Total Amount",
-              price: "\$$totalPrice",
-              isBold: true,
-            ),
-
-            const SizedBox(height: 30),
-
-            ConfirmButton(state: state, onPressed: onTapConfirm),
-          ],
-        );
-      },
-    );
-  }
-}
-
 class ConfirmButton extends StatelessWidget {
   final CheckoutStates state;
   final VoidCallback? onPressed;
@@ -451,6 +453,32 @@ class ConfirmButton extends StatelessWidget {
                   fontWeight: FontWeightManager.semiBold,
                 ),
               ),
+      ),
+    );
+  }
+}
+
+class ConfirmedOrderView extends StatelessWidget {
+  const ConfirmedOrderView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(flex: 3),
+          Icon(Icons.check_circle_outline, size: 100.h, color: Colors.green),
+          SizedBox(height: 20.h),
+          Text(
+            StringManager.orderConfirmed,
+            style: TextStyle(
+              fontWeight: FontWeightManager.bold,
+              fontSize: FontSize.s35,
+            ),
+          ),
+          const Spacer(flex: 4),
+        ],
       ),
     );
   }

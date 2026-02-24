@@ -23,7 +23,7 @@ class CheckoutScreen extends StatelessWidget {
         body: BlocBuilder<CheckoutCubit, CheckoutStates>(
           builder: (context, state) {
             if (state is CheckoutMakePaymentSuccessState) {
-              return const Center(child: Text("Payment Successful"));
+              return const ConfirmedOrderView();
             }
             if (state is CheckoutMakePaymentErrorState) {
               Fluttertoast.showToast(
@@ -43,6 +43,8 @@ class CheckoutScreen extends StatelessWidget {
                 }
                 if (cubit.currentStep < 2) {
                   cubit.changeStep(cubit.currentStep + 1);
+                } else {
+                  //TODO: Confirm Order
                 }
               },
               onStepCancel: () {

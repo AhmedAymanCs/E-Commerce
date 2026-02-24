@@ -33,4 +33,5 @@ class StringManager {
   static const String noProductsFound = 'No Products Found';
   static const String productAddedToCart = 'Product added to cart';
   static const String productNotAddedToCart = 'Product not added to cart';
+  static const String orderConfirmed = 'Order Confirmed';
 }
