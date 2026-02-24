@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
@@ -37,8 +38,9 @@ class CheckoutScreen extends StatelessWidget {
             if (state is CheckoutMakePaymentErrorState) {
               Fluttertoast.showToast(
                 msg: state.error,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
               );
             }
             return Stepper(
@@ -46,7 +48,12 @@ class CheckoutScreen extends StatelessWidget {
               currentStep: cubit.currentStep,
               onStepContinue: () {
                 if (cubit.currentStep == 0 && cubit.selectedAddress == null) {
-                  Fluttertoast.showToast(msg: "Please Select Address");
+                  Fluttertoast.showToast(
+                    msg: "Please Select Address",
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                  );
                   return;
                 }
                 if (cubit.currentStep < 2) {
@@ -68,8 +75,9 @@ class CheckoutScreen extends StatelessWidget {
                 } else {
                   Fluttertoast.showToast(
                     msg: "Please Finish the Previous Step",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
                   );
                 }
               },

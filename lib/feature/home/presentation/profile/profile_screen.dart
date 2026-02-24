@@ -17,29 +17,31 @@ class ProfilePage extends StatelessWidget {
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: ColorManager.gray300,
-                child: Icon(Icons.person, size: 50, color: Colors.white),
-              ),
-              SizedBox(height: 15.h),
-              Text(
-                HomeCubit.get(context).userModel.name!,
-                style: TextStyle(
-                  fontSize: FontSize.s22,
-                  fontWeight: FontWeightManager.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundColor: ColorManager.gray300,
+                  child: Icon(Icons.person, size: 50, color: Colors.white),
                 ),
-              ),
-              SizedBox(height: 30.h),
-              ProfileSection(
-                title: "Order History",
-                icon: Icons.arrow_forward_ios,
-                onTap: () =>
-                    Navigator.pushNamed(context, Routes.ordersHistoryRoute),
-              ),
-            ],
+                SizedBox(height: 15.h),
+                Text(
+                  HomeCubit.get(context).userModel.name!,
+                  style: TextStyle(
+                    fontSize: FontSize.s22,
+                    fontWeight: FontWeightManager.bold,
+                  ),
+                ),
+                SizedBox(height: 30.h),
+                ProfileSection(
+                  title: "Order History",
+                  icon: Icons.arrow_forward_ios,
+                  onTap: () =>
+                      Navigator.pushNamed(context, Routes.ordersHistoryRoute),
+                ),
+              ],
+            ),
           ),
         );
       },

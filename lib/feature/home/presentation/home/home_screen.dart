@@ -24,16 +24,17 @@ class HomePage extends StatelessWidget {
           if (state is HomeAddToCartSuccessState) {
             Fluttertoast.showToast(
               msg: StringManager.productAddedToCart,
-              textColor: ColorManager.green,
+              backgroundColor: ColorManager.green,
+              textColor: ColorManager.white,
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
             );
             if (state is HomeAddToCartErrorState) {
               Fluttertoast.showToast(
                 msg: StringManager.productNotAddedToCart,
-                textColor: ColorManager.red,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
               );
             }
           }

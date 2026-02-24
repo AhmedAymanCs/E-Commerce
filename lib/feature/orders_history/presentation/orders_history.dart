@@ -20,6 +20,9 @@ class OrdersHistory extends StatelessWidget {
         body: BlocBuilder<OrdersHistoryCubit, OrdersHistoryStates>(
           builder: (context, state) {
             if (state is OrdersHistorySuccess) {
+              if (state.ordersHistory.isEmpty) {
+                return const Center(child: Text("No Orders Found"));
+              }
               return OrderHistoryList(orders: state.ordersHistory);
             }
             if (state is OrdersHistoryError) {
