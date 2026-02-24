@@ -25,3 +25,10 @@ class AddAddressError extends CheckoutStates {
 class CheckoutStepChanged extends CheckoutStates {}
 
 class CheckoutPaymentMethodSelected extends CheckoutStates {}
+
+class CheckoutMakePaymentErrorState extends CheckoutStates {
+  final String error;
+  CheckoutMakePaymentErrorState(this.error);
+}
+
+class CheckoutMakePaymentSuccessState extends CheckoutStates {}

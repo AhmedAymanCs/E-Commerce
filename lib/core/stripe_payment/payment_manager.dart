@@ -16,9 +16,22 @@ abstract class PaymentManager {
         currency,
       );
       await _initializePaymentSheet(clientSecret);
+
       await Stripe.instance.presentPaymentSheet();
+
       return const Right(null);
     } catch (e) {
+      if (e is StripeException) {
+        if (e.error.code == FailureCode.Canceled) {
+          return const Left("USER_CANCELED");
+        }
+        return Left(e.error.localizedMessage ?? "Payment Failed");
+      }
+
+      if (e.toString().contains('canceled')) {
+        return const Left("USER_CANCELED");
+      }
+
       return Left(e.toString());
     }
   }

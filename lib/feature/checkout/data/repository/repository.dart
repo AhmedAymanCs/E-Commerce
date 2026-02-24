@@ -44,11 +44,6 @@ class CheckoutRepoImpl implements CheckoutRepo {
 
   @override
   ServerResponse<void> makePayment(double amount, String currency) async {
-    try {
-      await PaymentManager.makePayment(amount, currency);
-      return const Right(null);
-    } catch (e) {
-      return Left(e.toString());
-    }
+    return await PaymentManager.makePayment(amount, currency);
   }
 }

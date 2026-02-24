@@ -67,4 +67,12 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     paymentMethod = method;
     emit(CheckoutPaymentMethodSelected());
   }
+
+  Future<void> makePayment(double amount, String currency) async {
+    final payment = await _checkoutRepo.makePayment(amount, currency);
+    payment.fold(
+      (error) => emit(CheckoutMakePaymentErrorState(error)),
+      (success) => emit(CheckoutMakePaymentSuccessState()),
+    );
+  }
 }

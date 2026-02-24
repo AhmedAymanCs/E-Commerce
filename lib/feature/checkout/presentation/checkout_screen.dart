@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
@@ -21,6 +22,16 @@ class CheckoutScreen extends StatelessWidget {
         appBar: AppBar(title: const Text("Checkout")),
         body: BlocBuilder<CheckoutCubit, CheckoutStates>(
           builder: (context, state) {
+            if (state is CheckoutMakePaymentSuccessState) {
+              return const Center(child: Text("Payment Successful"));
+            }
+            if (state is CheckoutMakePaymentErrorState) {
+              Fluttertoast.showToast(
+                msg: state.error,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+              );
+            }
             CheckoutCubit cubit = CheckoutCubit.get(context);
             return Stepper(
               type: StepperType.vertical,
@@ -72,7 +83,11 @@ class CheckoutScreen extends StatelessWidget {
                 Step(
                   isActive: cubit.currentStep >= 2,
                   title: const Text("Summary"),
-                  content: SummaryStepWidget(totalPrice: totalPrice),
+                  content: SummaryStepWidget(
+                    totalPrice: totalPrice,
+                    onTapConfirm: () =>
+                        cubit.makePayment(totalPrice, AppConstants.currency),
+                  ),
                 ),
               ],
             );
