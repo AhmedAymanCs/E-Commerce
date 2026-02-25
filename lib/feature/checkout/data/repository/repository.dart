@@ -21,14 +21,17 @@ abstract class CheckoutRepo {
 }
 
 class CheckoutRepoImpl implements CheckoutRepo {
-  final CheckoutRemoteDataSource _remoteDataSource;
-
-  CheckoutRepoImpl(this._remoteDataSource);
+  final CheckoutRemoteDataSource remoteDataSource;
+  final PaymentManager paymentManager;
+  CheckoutRepoImpl({
+    required this.remoteDataSource,
+    required this.paymentManager,
+  });
 
   @override
   ServerResponse<List<AddressModel>> getAddresses(String userId) async {
     try {
-      final addresses = await _remoteDataSource.getAddresses(userId);
+      final addresses = await remoteDataSource.getAddresses(userId);
       return Right(addresses);
     } catch (e) {
       return Left(e.toString());
@@ -41,7 +44,7 @@ class CheckoutRepoImpl implements CheckoutRepo {
     required AddressModel address,
   }) async {
     try {
-      await _remoteDataSource.addAddress(userId: userId, address: address);
+      await remoteDataSource.addAddress(userId: userId, address: address);
       return const Right(null);
     } catch (e) {
       return Left(e.toString());
@@ -50,7 +53,7 @@ class CheckoutRepoImpl implements CheckoutRepo {
 
   @override
   ServerResponse<void> makePayment(double amount, String currency) async {
-    return await PaymentManager.makePayment(amount, currency);
+    return await paymentManager.makePayment(amount, currency);
   }
 
   @override
@@ -60,7 +63,7 @@ class CheckoutRepoImpl implements CheckoutRepo {
     totalPrice,
   ) async {
     try {
-      await _remoteDataSource.addOrderHistory(userId, products, totalPrice);
+      await remoteDataSource.addOrderHistory(userId, products, totalPrice);
       return const Right(null);
     } catch (error) {
       return Left(error.toString());

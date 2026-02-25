@@ -1,6 +1,6 @@
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
-import 'package:e_commerce/feature/auth/login/logic/states.dart';
+import 'package:e_commerce/feature/auth/presentation/login/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginCubit extends Cubit<LoginStates> {

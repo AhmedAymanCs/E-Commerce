@@ -7,17 +7,15 @@ import 'package:e_commerce/core/stripe_payment/stripe_keys.dart';
 import 'package:e_commerce/core/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = ApiKeys.publishableKey;
-  setupDioLocator();
-  setupSecureStorageLocator();
-  setupAuthRepositoryLocator();
-  setupFirestoreLocator();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  servicesLocatorInit();
   runApp(const MyApp());
 }
 

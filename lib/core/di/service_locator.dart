@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:e_commerce/core/database/remote/networking/api_constant.dart';
 import 'package:e_commerce/core/database/remote/networking/dio_helper.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
+import 'package:e_commerce/core/stripe_payment/payment_manager.dart';
+import 'package:e_commerce/core/stripe_payment/stripe_keys.dart';
 import 'package:e_commerce/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dart';
@@ -13,10 +15,19 @@ import 'package:e_commerce/feature/orders_history/data/data_source/data_source.d
 import 'package:e_commerce/feature/orders_history/data/repository/repositroy.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
-void setupDioLocator() {
+void servicesLocatorInit() {
+  _setupDioLocator();
+  _setupSecureStorageLocator();
+  _setupAuthRepositoryLocator();
+  _setupFirestoreLocator();
+  _setupStripeLocator();
+}
+
+void _setupDioLocator() {
   getIt.registerLazySingleton<Dio>(
     () => Dio(
       BaseOptions(
@@ -30,7 +41,7 @@ void setupDioLocator() {
   getIt.registerLazySingleton<DioHelper>(() => DioHelper(getIt<Dio>()));
 }
 
-void setupSecureStorageLocator() {
+void _setupSecureStorageLocator() {
   getIt.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(
       aOptions: AndroidOptions(),
@@ -42,7 +53,7 @@ void setupSecureStorageLocator() {
   );
 }
 
-void setupAuthRepositoryLocator() {
+void _setupAuthRepositoryLocator() {
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(getIt<FirebaseAuth>()),
@@ -52,7 +63,7 @@ void setupAuthRepositoryLocator() {
   );
 }
 
-void setupFirestoreLocator() {
+void _setupFirestoreLocator() {
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
@@ -70,12 +81,22 @@ void setupFirestoreLocator() {
     () => CheckoutRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
   getIt.registerLazySingleton<CheckoutRepo>(
-    () => CheckoutRepoImpl(getIt<CheckoutRemoteDataSource>()),
+    () => CheckoutRepoImpl(
+      remoteDataSource: getIt<CheckoutRemoteDataSource>(),
+      paymentManager: getIt<PaymentManager>(),
+    ),
   );
   getIt.registerLazySingleton<OrdersHistoryRemoteDataSource>(
     () => OrdersHistoryRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
   getIt.registerLazySingleton<OrdersHistoryRepository>(
     () => OrdersHistoryRepositoryImpl(getIt<OrdersHistoryRemoteDataSource>()),
+  );
+}
+
+void _setupStripeLocator() {
+  Stripe.publishableKey = ApiKeys.publishableKey;
+  getIt.registerLazySingleton<PaymentManager>(
+    () => PaymentManager(getIt<Dio>()),
   );
 }
