@@ -3,20 +3,14 @@ import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
 import 'package:e_commerce/feature/checkout/logic/states.dart';
 import 'package:e_commerce/feature/checkout/presentation/shared_widgets.dart';
-import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/core/models/checkout_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  final double totalPrice;
-  final List<ProductModel> cartList;
-  const CheckoutScreen({
-    super.key,
-    required this.totalPrice,
-    required this.cartList,
-  });
-
+  final CheckoutArguments arguments;
+  const CheckoutScreen({super.key, required this.arguments});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -32,7 +26,7 @@ class CheckoutScreen extends StatelessWidget {
               return const ConfirmedOrderView();
             }
             if (state is CheckoutMakePaymentSuccessState) {
-              cubit.addOrderHistory(cartList, totalPrice);
+              cubit.addOrderHistory(arguments.cartList, arguments.totalPrice);
             }
             if (state is CheckoutMakePaymentErrorState) {
               Fluttertoast.showToast(
@@ -58,7 +52,7 @@ class CheckoutScreen extends StatelessWidget {
                 if (cubit.currentStep < 2) {
                   cubit.changeStep(cubit.currentStep + 1);
                 } else {
-                  cubit.confirmOrder(totalPrice);
+                  cubit.confirmOrder(arguments.totalPrice);
                 }
               },
               onStepCancel: () {
@@ -95,12 +89,12 @@ class CheckoutScreen extends StatelessWidget {
                       ? StepState.complete
                       : StepState.indexed,
                   title: const Text("Payment"),
-                  content: PaymentStepWidget(totalAmount: totalPrice),
+                  content: PaymentStepWidget(totalAmount: arguments.totalPrice),
                 ),
                 Step(
                   isActive: cubit.currentStep >= 2,
                   title: const Text("Summary"),
-                  content: SummaryStepWidget(totalPrice: totalPrice),
+                  content: SummaryStepWidget(totalPrice: arguments.totalPrice),
                 ),
               ],
             );

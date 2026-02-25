@@ -4,6 +4,7 @@ import 'package:e_commerce/feature/auth/presentation/forget_passoword/presentati
 import 'package:e_commerce/feature/auth/presentation/login/presentation/login_screen.dart';
 import 'package:e_commerce/feature/auth/presentation/register/presentation/register_screen.dart';
 import 'package:e_commerce/feature/checkout/presentation/checkout_screen.dart';
+import 'package:e_commerce/core/models/checkout_model.dart';
 import 'package:e_commerce/feature/home/presentation/layout.dart';
 import 'package:e_commerce/feature/orders_history/presentation/orders_history.dart';
 import 'package:e_commerce/feature/splash/screens/splash_screen.dart';
@@ -18,12 +19,9 @@ class AppRouter {
           builder: (_) => Layout(userModel: arg as UserModel),
         );
       case Routes.checkoutRoute:
-        final arg = settings.arguments as Map<String, dynamic>;
+        final arg = settings.arguments as CheckoutArguments;
         return MaterialPageRoute(
-          builder: (_) => CheckoutScreen(
-            totalPrice: arg['totalPrice'],
-            cartList: arg['cartList'],
-          ),
+          builder: (_) => CheckoutScreen(arguments: arg),
         );
       case Routes.ordersHistoryRoute:
         return MaterialPageRoute(builder: (_) => const OrdersHistory());

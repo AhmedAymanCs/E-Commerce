@@ -1,5 +1,6 @@
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/routing/routes.dart';
+import 'package:e_commerce/core/models/checkout_model.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
 import 'package:e_commerce/feature/home/presentation/cart/shared_widgets.dart';
@@ -61,10 +62,10 @@ class CartPage extends StatelessWidget {
                       onPressed: () => Navigator.pushNamed(
                         context,
                         Routes.checkoutRoute,
-                        arguments: {
-                          'totalPrice': cubit.cartModel.total,
-                          'cartList': cubit.cartList,
-                        },
+                        arguments: CheckoutArguments(
+                          totalPrice: cubit.cartModel.total,
+                          cartList: cubit.cartList,
+                        ),
                       ),
                     ),
                   ],
