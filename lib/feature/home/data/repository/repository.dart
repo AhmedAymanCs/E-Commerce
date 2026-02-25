@@ -5,14 +5,14 @@ import 'package:e_commerce/feature/home/data/data_source/data_source.dart';
 
 abstract class HomeRepository {
   ServerResponse<List<ProductModel>> getProducts();
-  ServerResponse<void> addToCart(ProductModel product);
-  ServerResponse<void> addToWishlist(ProductModel product);
-  ServerResponse<void> deleteFromWishList(int productId);
+  ServerResponse<Unit> addToCart(ProductModel product);
+  ServerResponse<Unit> addToWishlist(ProductModel product);
+  ServerResponse<Unit> deleteFromWishList(int productId);
   ServerResponse<List<ProductModel>> getWishList();
   ServerResponse<List<ProductModel>> getCart();
-  ServerResponse<void> deleteFromCart(int productId);
-  ServerResponse<void> clearCart();
-  ServerResponse<void> updateQuantityInCart(int productId, int quantity);
+  ServerResponse<Unit> deleteFromCart(int productId);
+  ServerResponse<Unit> clearCart();
+  ServerResponse<Unit> updateQuantityInCart(int productId, int quantity);
   Future<void> signOut();
 }
 
@@ -39,30 +39,30 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  ServerResponse<void> addToCart(ProductModel product) async {
+  ServerResponse<Unit> addToCart(ProductModel product) async {
     try {
       await _homeRemoteDataSource.addToCart(product);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
   }
 
   @override
-  ServerResponse<void> addToWishlist(ProductModel product) async {
+  ServerResponse<Unit> addToWishlist(ProductModel product) async {
     try {
       await _homeRemoteDataSource.addToWishlist(product);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
   }
 
   @override
-  ServerResponse<void> deleteFromWishList(int productId) async {
+  ServerResponse<Unit> deleteFromWishList(int productId) async {
     try {
       await _homeRemoteDataSource.deleteFromWishList(productId);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
@@ -79,10 +79,10 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  ServerResponse<void> deleteFromCart(int productId) async {
+  ServerResponse<Unit> deleteFromCart(int productId) async {
     try {
       await _homeRemoteDataSource.deleteFromCart(productId);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
@@ -99,20 +99,20 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  ServerResponse<void> updateQuantityInCart(int productId, int quantity) async {
+  ServerResponse<Unit> updateQuantityInCart(int productId, int quantity) async {
     try {
       await _homeRemoteDataSource.updateQuantityInCart(productId, quantity);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
   }
 
   @override
-  ServerResponse<void> clearCart() async {
+  ServerResponse<Unit> clearCart() async {
     try {
       await _homeRemoteDataSource.clearCart();
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }

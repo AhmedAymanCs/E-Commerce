@@ -16,7 +16,7 @@ abstract class AuthRepository {
     required String password,
     bool rememberMe = false,
   });
-  ServerResponse<void> register({
+  ServerResponse<Unit> register({
     required String name,
     required String phone,
     required String email,
@@ -75,7 +75,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  ServerResponse<void> register({
+  ServerResponse<Unit> register({
     required String name,
     required String phone,
     required String email,
@@ -88,7 +88,7 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
-      return const Right(null);
+      return const Right(unit);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return Left(StringManager.weekPassword);
@@ -102,10 +102,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  ServerResponse<void> sendPasswordResetEmail({required String email}) async {
+  ServerResponse<Unit> sendPasswordResetEmail({required String email}) async {
     try {
       await _authRemoteDataSource.sendPasswordResetEmail(email: email);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }

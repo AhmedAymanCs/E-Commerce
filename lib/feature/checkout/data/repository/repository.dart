@@ -8,12 +8,12 @@ import 'package:dartz/dartz.dart';
 abstract class CheckoutRepo {
   ServerResponse<List<AddressModel>> getAddresses(String userId);
 
-  ServerResponse<void> addAddress({
+  ServerResponse<Unit> addAddress({
     required String userId,
     required AddressModel address,
   });
   ServerResponse<void> makePayment(double amount, String currency);
-  ServerResponse<void> addOrderHistory(
+  ServerResponse<Unit> addOrderHistory(
     String userId,
     List<ProductModel> products,
     totalPrice,
@@ -39,13 +39,13 @@ class CheckoutRepoImpl implements CheckoutRepo {
   }
 
   @override
-  ServerResponse<void> addAddress({
+  ServerResponse<Unit> addAddress({
     required String userId,
     required AddressModel address,
   }) async {
     try {
       await remoteDataSource.addAddress(userId: userId, address: address);
-      return const Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(e.toString());
     }
@@ -57,14 +57,14 @@ class CheckoutRepoImpl implements CheckoutRepo {
   }
 
   @override
-  ServerResponse<void> addOrderHistory(
+  ServerResponse<Unit> addOrderHistory(
     String userId,
     List<ProductModel> products,
     totalPrice,
   ) async {
     try {
       await remoteDataSource.addOrderHistory(userId, products, totalPrice);
-      return const Right(null);
+      return const Right(unit);
     } catch (error) {
       return Left(error.toString());
     }
