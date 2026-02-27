@@ -88,13 +88,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             }
                             return CustomButton(
                               text: StringManager.forgotPassword,
-                              onPressed: () {
-                                if (cubit.validateEmail(
-                                  _emailController.text,
-                                )) {
-                                  cubit.forgetPassword(_emailController.text);
-                                }
-                              },
+                              onPressed: () =>
+                                  cubit.forgetPassword(_emailController.text),
                             );
                           },
                         ),

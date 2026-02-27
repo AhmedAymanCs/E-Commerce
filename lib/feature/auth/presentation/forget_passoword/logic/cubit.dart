@@ -11,14 +11,18 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   // ignore: strict_top_level_inference
   static ForgetPasswordCubit get(context) => BlocProvider.of(context);
   Future<void> forgetPassword(String email) async {
-    emit(ForgetPasswordLoadingState());
-    final userCredential = await _authRepository.sendPasswordResetEmail(
-      email: email,
-    );
-    userCredential.fold(
-      (r) => emit(ForgetPasswordErrorState(r)),
-      (l) => emit(ForgetPasswordSuccessState()),
-    );
+    if (!validateEmail(email)) {
+      return;
+    } else {
+      emit(ForgetPasswordLoadingState());
+      final userCredential = await _authRepository.sendPasswordResetEmail(
+        email: email,
+      );
+      userCredential.fold(
+        (r) => emit(ForgetPasswordErrorState(r)),
+        (l) => emit(ForgetPasswordSuccessState()),
+      );
+    }
   }
 
   bool validateEmail(String email) {
