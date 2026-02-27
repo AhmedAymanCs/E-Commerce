@@ -19,7 +19,6 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
       (r) => emit(ForgetPasswordErrorState(r)),
       (l) => emit(ForgetPasswordSuccessState()),
     );
-    emit(ForgetPasswordLoadingState());
   }
 
   bool validateEmail(String email) {

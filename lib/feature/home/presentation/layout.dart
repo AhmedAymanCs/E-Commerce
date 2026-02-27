@@ -1,5 +1,6 @@
 import 'package:e_commerce/core/constants/image_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
+import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
@@ -16,8 +17,11 @@ class Layout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          HomeCubit(getIt<HomeRepository>(), userModel)..getAllHomeData(),
+      create: (context) => HomeCubit(
+        homeRepository: getIt<HomeRepository>(),
+        userModel: userModel,
+        secureStorageHelper: getIt<SecureStorageHelper>(),
+      )..getAllHomeData(),
       child: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) {},
         builder: (context, state) {

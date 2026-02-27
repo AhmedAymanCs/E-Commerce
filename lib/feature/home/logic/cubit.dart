@@ -1,5 +1,4 @@
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
-import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/utils/extensions.dart';
 import 'package:e_commerce/feature/home/data/models/cart_model.dart';
@@ -15,9 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
-  final HomeRepository _homeRepository;
+  final HomeRepository homeRepository;
   final UserModel userModel;
-  HomeCubit(this._homeRepository, this.userModel) : super(HomeInitialState());
+  final SecureStorageHelper secureStorageHelper;
+  HomeCubit({
+    required this.homeRepository,
+    required this.userModel,
+    required this.secureStorageHelper,
+  }) : super(HomeInitialState());
 
   // ignore: strict_top_level_inference
   static HomeCubit get(context) => BlocProvider.of(context);
@@ -58,7 +62,7 @@ class HomeCubit extends Cubit<HomeStates> {
   } //getAllHomeData method (get all data from home repository) in frist open app
 
   Future<void> getProducts() async {
-    final products = await _homeRepository.getProducts();
+    final products = await homeRepository.getProducts();
     products.fold((error) => emit(HomeGetProductsErrorState(error)), (
       products,
     ) {
@@ -108,12 +112,12 @@ class HomeCubit extends Cubit<HomeStates> {
   ///////////// wishlist methods ///////////////////
 
   Future<void> toggleWishlist(ProductModel product) async {
-    final result = await _homeRepository.addToWishlist(product);
+    final result = await homeRepository.addToWishlist(product);
 
     result.fold((error) => emit(HomeAddToWishListErrorState(error)), (success) {
       if (wishList.any((element) => element.id == product.id)) {
         wishList.removeWhere((element) => element.id == product.id);
-        _homeRepository.deleteFromWishList(product.id);
+        homeRepository.deleteFromWishList(product.id);
       } else {
         wishList.add(product);
       }
@@ -124,7 +128,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> getWishlist() async {
     emit(GetWishlistLoading());
-    final result = await _homeRepository.getWishList();
+    final result = await homeRepository.getWishList();
     result.fold((r) => emit(GetWishlistError(r)), (data) {
       wishList = data;
       emit(GetWishlistSuccess(data));
@@ -146,7 +150,7 @@ class HomeCubit extends Cubit<HomeStates> {
   ///////////// cart methods ///////////////////
 
   Future<void> addToCart(ProductModel product) async {
-    final cart = await _homeRepository.addToCart(product);
+    final cart = await homeRepository.addToCart(product);
     int index = cartList.indexWhere((element) => element.id == product.id);
 
     if (index != -1) {
@@ -165,7 +169,7 @@ class HomeCubit extends Cubit<HomeStates> {
   } //addToCart method
 
   Future<void> deleteCartlist(int productId) async {
-    final cart = await _homeRepository.deleteFromCart(productId);
+    final cart = await homeRepository.deleteFromCart(productId);
     cart.fold((r) => emit(HomeDeleteCartErrorState(r)), (l) {
       final itemIndex = cartList.indexWhere((e) => e.id == productId);
       if (itemIndex != -1) {
@@ -178,7 +182,7 @@ class HomeCubit extends Cubit<HomeStates> {
   } //deleteCartlist method
 
   Future<void> getCart() async {
-    final products = await _homeRepository.getCart();
+    final products = await homeRepository.getCart();
     products.fold((error) => emit(HomeAddToCartErrorState(error)), (products) {
       cartList = products;
     });
@@ -214,7 +218,7 @@ class HomeCubit extends Cubit<HomeStates> {
           : quantity == 1
           ? quantity
           : quantity--;
-      final product = await _homeRepository.updateQuantityInCart(
+      final product = await homeRepository.updateQuantityInCart(
         productId,
         quantity,
       );
@@ -228,18 +232,21 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   Future<void> clearCart() async {
+    for (var product in cartList) {
+      product.quantity = 1;
+    }
     cartList.clear();
-    await _homeRepository.clearCart();
+    await homeRepository.clearCart();
     cartModel = CartModel(discount: 0, subtotal: 0, tax: 0, total: 0);
     emit(HomeClearCartSuccessState());
   }
 
   // ignore: strict_top_level_inference
   Future<void> signOut(context) async {
-    _homeRepository
+    homeRepository
         .signOut()
         .then((_) {
-          getIt<SecureStorageHelper>().clearAll();
+          secureStorageHelper.clearAll();
           Navigator.pushNamedAndRemoveUntil(
             context,
             Routes.loginRoute,

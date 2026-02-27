@@ -5,7 +5,6 @@ import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/database/remote/networking/api_constant.dart';
 import 'package:e_commerce/core/database/remote/networking/dio_helper.dart';
-import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -84,7 +83,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<List<ProductModel>> getWishlist() async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
