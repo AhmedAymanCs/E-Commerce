@@ -59,7 +59,11 @@ void _setupAuthRepositoryLocator() {
     () => AuthRemoteDataSourceImpl(getIt<FirebaseAuth>()),
   );
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(getIt<AuthRemoteDataSource>()),
+    () => AuthRepositoryImpl(
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      firestore: getIt<FirebaseFirestore>(),
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+    ),
   );
 }
 
@@ -87,7 +91,10 @@ void _setupFirestoreLocator() {
     ),
   );
   getIt.registerLazySingleton<OrdersHistoryRemoteDataSource>(
-    () => OrdersHistoryRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+    () => OrdersHistoryRemoteDataSourceImpl(
+      getIt<FirebaseFirestore>(),
+      getIt<SecureStorageHelper>(),
+    ),
   );
   getIt.registerLazySingleton<OrdersHistoryRepository>(
     () => OrdersHistoryRepositoryImpl(getIt<OrdersHistoryRemoteDataSource>()),

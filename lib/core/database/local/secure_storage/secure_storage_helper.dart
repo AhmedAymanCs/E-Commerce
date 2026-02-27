@@ -1,9 +1,14 @@
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorageHelper {
   final FlutterSecureStorage _storage;
 
   SecureStorageHelper(this._storage);
+
+  Future<void> saveUserData(String value) async {
+    await _storage.write(key: AppConstants.userSession, value: value);
+  }
 
   Future<void> saveData({required String key, required String value}) async {
     await _storage.write(key: key, value: value);

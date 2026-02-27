@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
-import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
@@ -26,8 +25,14 @@ abstract class AuthRepository {
 }
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource _authRemoteDataSource;
-  AuthRepositoryImpl(this._authRemoteDataSource);
+  final AuthRemoteDataSource authRemoteDataSource;
+  final FirebaseFirestore firestore;
+  final SecureStorageHelper secureStorageHelper;
+  AuthRepositoryImpl({
+    required this.authRemoteDataSource,
+    required this.firestore,
+    required this.secureStorageHelper,
+  });
 
   @override
   ServerResponse<UserModel> login({
@@ -36,13 +41,13 @@ class AuthRepositoryImpl implements AuthRepository {
     bool rememberMe = false,
   }) async {
     try {
-      final userCredential = await _authRemoteDataSource.login(
+      final userCredential = await authRemoteDataSource.login(
         email: email,
         password: password,
       );
 
       if (userCredential.user != null) {
-        final userDoc = await getIt<FirebaseFirestore>()
+        final userDoc = await firestore
             .collection(AppConstants.usersCollectionName)
             .doc(userCredential.user!.uid)
             .get();
@@ -52,10 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
           if (rememberMe) {
             String sessionData = jsonEncode(userModel.toJson());
-            await getIt<SecureStorageHelper>().saveData(
-              key: 'user_session',
-              value: sessionData,
-            );
+            await secureStorageHelper.saveUserData(sessionData);
           }
 
           return Right(userModel);
@@ -82,7 +84,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      await _authRemoteDataSource.register(
+      await authRemoteDataSource.register(
         name: name,
         phone: phone,
         email: email,
@@ -104,7 +106,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   ServerResponse<Unit> sendPasswordResetEmail({required String email}) async {
     try {
-      await _authRemoteDataSource.sendPasswordResetEmail(email: email);
+      await authRemoteDataSource.sendPasswordResetEmail(email: email);
       return const Right(unit);
     } catch (e) {
       return Left(e.toString());
