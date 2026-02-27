@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/feature/auth/data/models/register_prams_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRemoteDataSource {
@@ -6,12 +7,7 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
   });
-  Future<UserCredential> register({
-    required String name,
-    required String phone,
-    required String email,
-    required String password,
-  });
+  Future<UserCredential> register(RegisterParamsModel params);
   Future<void> sendPasswordResetEmail({required String email});
 }
 
@@ -30,27 +26,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserCredential> register({
-    required String name,
-    required String phone,
-    required String email,
-    required String password,
-  }) async {
+  Future<UserCredential> register(RegisterParamsModel params) async {
     final credential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
+        .createUserWithEmailAndPassword(
+          email: params.email,
+          password: params.password,
+        );
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(credential.user!.uid)
-        .set({
-          'uId': credential.user!.uid,
-          'name': name,
-          'phone': phone,
-          'email': email,
-          'createdAt': DateTime.now().toIso8601String(),
-          'imageUrl': '', //late add
-          'city': '', //late add
-          'street': '', //late add
-        });
+        .set(params.toMap());
     return credential;
   }
 

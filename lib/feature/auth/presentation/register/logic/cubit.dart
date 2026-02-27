@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/constants/string_manager.dart';
+import 'package:e_commerce/feature/auth/data/models/register_prams_model.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/presentation/register/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,10 +26,12 @@ class RegisterCubit extends Cubit<RegisterStates> {
   }) async {
     emit(RegisterLoadingState());
     final userCredential = await _authRepository.register(
-      name: name,
-      phone: phone,
-      email: email,
-      password: password,
+      RegisterParamsModel(
+        name: name,
+        phone: phone,
+        email: email,
+        password: password,
+      ),
     );
     userCredential.fold(
       (r) => emit(RegisterErrorState(r)),

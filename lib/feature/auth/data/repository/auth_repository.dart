@@ -7,6 +7,7 @@ import 'package:e_commerce/core/database/local/secure_storage/secure_storage_hel
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/auth/data/data_source/auth_data_source.dart';
+import 'package:e_commerce/feature/auth/data/models/register_prams_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepository {
@@ -15,12 +16,7 @@ abstract class AuthRepository {
     required String password,
     bool rememberMe = false,
   });
-  ServerResponse<Unit> register({
-    required String name,
-    required String phone,
-    required String email,
-    required String password,
-  });
+  ServerResponse<Unit> register(RegisterParamsModel params);
   ServerResponse<void> sendPasswordResetEmail({required String email});
 }
 
@@ -77,19 +73,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  ServerResponse<Unit> register({
-    required String name,
-    required String phone,
-    required String email,
-    required String password,
-  }) async {
+  ServerResponse<Unit> register(RegisterParamsModel params) async {
     try {
-      await authRemoteDataSource.register(
-        name: name,
-        phone: phone,
-        email: email,
-        password: password,
-      );
+      await authRemoteDataSource.register(params);
       return const Right(unit);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
