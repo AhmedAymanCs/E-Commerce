@@ -73,8 +73,10 @@ void _setupFirestoreLocator() {
   );
   getIt.registerLazySingleton<HomeRemoteDataSource>(
     () => HomeRemoteDataSourceImpl(
-      getIt<DioHelper>(),
-      getIt<FirebaseFirestore>(),
+      dio: getIt<DioHelper>(),
+      firestore: getIt<FirebaseFirestore>(),
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      firebaseAuth: getIt<FirebaseAuth>(),
     ),
   );
   getIt.registerLazySingleton<HomeRepository>(

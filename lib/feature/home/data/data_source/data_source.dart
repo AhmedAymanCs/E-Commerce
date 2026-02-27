@@ -23,21 +23,28 @@ abstract class HomeRemoteDataSource {
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
-  final DioHelper _dio;
-  final FirebaseFirestore _firestore;
-  HomeRemoteDataSourceImpl(this._dio, this._firestore);
+  final DioHelper dio;
+  final FirebaseFirestore firestore;
+  final SecureStorageHelper secureStorageHelper;
+  final FirebaseAuth firebaseAuth;
+  HomeRemoteDataSourceImpl({
+    required this.dio,
+    required this.firestore,
+    required this.secureStorageHelper,
+    required this.firebaseAuth,
+  });
   @override
   Future<Response> getProducts() async {
-    return _dio.getData(endPoint: ApiConstant.productEndPoint);
+    return dio.getData(endPoint: ApiConstant.productEndPoint);
   }
 
   @override
   Future<void> addToCart(ProductModel product) async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    await _firestore
+    await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName)
@@ -47,11 +54,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> addToWishlist(ProductModel product) async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    await _firestore
+    await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.wishlistCollectionName)
@@ -61,11 +68,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<List<ProductModel>> getCart() async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    final querySnapshot = await _firestore
+    final querySnapshot = await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName)
@@ -81,7 +88,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    final querySnapshot = await _firestore
+    final querySnapshot = await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.wishlistCollectionName)
@@ -93,11 +100,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> deleteFromWishList(int productId) async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    await _firestore
+    await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.wishlistCollectionName)
@@ -107,11 +114,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> deleteFromCart(int productId) async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    await _firestore
+    await firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName)
@@ -121,11 +128,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> updateQuantityInCart(int productId, int quantity) async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    _firestore
+    firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName)
@@ -135,11 +142,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> clearCart() async {
-    final userSession = await getIt<SecureStorageHelper>().getData(
+    final userSession = await secureStorageHelper.getData(
       key: AppConstants.userSession,
     );
     final userId = jsonDecode(userSession!)['uId'];
-    final cartCollection = _firestore
+    final cartCollection = firestore
         .collection(AppConstants.usersCollectionName)
         .doc(userId)
         .collection(AppConstants.cartCollectionName);
@@ -153,6 +160,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<void> signOut() async {
-    await getIt<FirebaseAuth>().signOut();
+    await firebaseAuth.signOut();
   }
 }
