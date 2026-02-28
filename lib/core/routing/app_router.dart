@@ -1,3 +1,5 @@
+import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
+import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/auth/presentation/forget_passoword/presentation/forget_password_screen.dart';
@@ -16,7 +18,10 @@ class AppRouter {
       case Routes.homeRoute:
         final arg = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => Layout(userModel: arg as UserModel),
+          builder: (_) => Layout(
+            userModel: arg as UserModel,
+            secureStorageHelper: getIt<SecureStorageHelper>(),
+          ),
         );
       case Routes.checkoutRoute:
         final arg = settings.arguments as CheckoutArguments;
@@ -26,7 +31,10 @@ class AppRouter {
       case Routes.ordersHistoryRoute:
         return MaterialPageRoute(builder: (_) => const OrdersHistory());
       case Routes.splashRoute:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        return MaterialPageRoute(
+          builder: (_) =>
+              SplashScreen(secureStorageHelper: getIt<SecureStorageHelper>()),
+        );
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case Routes.forgetPasswordRoute:

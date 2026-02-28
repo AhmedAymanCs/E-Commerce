@@ -2,7 +2,6 @@ import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/core/constants/image_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
-import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/feature/splash/logic/cubit.dart';
 import 'package:e_commerce/feature/splash/logic/states.dart';
@@ -12,13 +11,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+  final SecureStorageHelper secureStorageHelper;
+  const SplashScreen({super.key, required this.secureStorageHelper});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          SplashCubit(getIt<SecureStorageHelper>())..startSplash(),
+      create: (context) => SplashCubit(secureStorageHelper)..startSplash(),
       child: BlocListener<SplashCubit, SplashStates>(
         listener: (context, state) {
           if (state is SplashAuthenticatedState) {

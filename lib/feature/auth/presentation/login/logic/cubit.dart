@@ -24,16 +24,19 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   Future<void> login({required String email, required String password}) async {
-    emit(LoginLoadingState());
-    final userCredential = await _authRepository.login(
-      email: email,
-      password: password,
-      rememberMe: rememberMe,
-    );
-    userCredential.fold(
-      (r) => emit(LoginErrorState(r)),
-      (l) => emit(LoginSuccessState(l)),
-    );
+    final bool isValid = validator(email: email, password: password);
+    if (isValid) {
+      emit(LoginLoadingState());
+      final userCredential = await _authRepository.login(
+        email: email,
+        password: password,
+        rememberMe: rememberMe,
+      );
+      userCredential.fold(
+        (r) => emit(LoginErrorState(r)),
+        (l) => emit(LoginSuccessState(l)),
+      );
+    }
   }
 
   bool validator({required String email, required String password}) {

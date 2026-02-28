@@ -12,7 +12,12 @@ import 'package:flutter_svg/svg.dart';
 
 class Layout extends StatelessWidget {
   final UserModel userModel;
-  const Layout({super.key, required this.userModel});
+  final SecureStorageHelper secureStorageHelper;
+  const Layout({
+    super.key,
+    required this.userModel,
+    required this.secureStorageHelper,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class Layout extends StatelessWidget {
       create: (context) => HomeCubit(
         homeRepository: getIt<HomeRepository>(),
         userModel: userModel,
-        secureStorageHelper: getIt<SecureStorageHelper>(),
+        secureStorageHelper: secureStorageHelper,
       )..getAllHomeData(),
       child: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) {},

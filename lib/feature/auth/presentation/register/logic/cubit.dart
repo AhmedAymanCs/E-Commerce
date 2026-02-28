@@ -24,19 +24,28 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String email,
     required String password,
   }) async {
-    emit(RegisterLoadingState());
-    final userCredential = await _authRepository.register(
-      RegisterParamsModel(
-        name: name,
-        phone: phone,
-        email: email,
-        password: password,
-      ),
+    final bool isValid = validator(
+      password: password,
+      confirmPassword: password,
+      email: email,
+      name: name,
+      phone: phone,
     );
-    userCredential.fold(
-      (r) => emit(RegisterErrorState(r)),
-      (l) => emit(RegisterSuccessState()),
-    );
+    if (isValid) {
+      emit(RegisterLoadingState());
+      final userCredential = await _authRepository.register(
+        RegisterParamsModel(
+          name: name,
+          phone: phone,
+          email: email,
+          password: password,
+        ),
+      );
+      userCredential.fold(
+        (r) => emit(RegisterErrorState(r)),
+        (l) => emit(RegisterSuccessState()),
+      );
+    }
   }
 
   bool validator({

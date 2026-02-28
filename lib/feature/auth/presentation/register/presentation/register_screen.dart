@@ -147,24 +147,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         } else {
                           return CustomButton(
                             text: StringManager.signUp,
-                            onPressed: () {
-                              final bool isValid = cubit.validator(
-                                password: _passwordController.text,
-                                confirmPassword:
-                                    _confirmPasswordController.text,
-                                email: _emailController.text,
-                                name: _nameController.text,
-                                phone: _phoneController.text,
-                              );
-                              if (isValid) {
-                                cubit.register(
-                                  name: _nameController.text,
-                                  phone: _phoneController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                );
-                              }
-                            },
+                            onPressed: () => cubit.register(
+                              name: _nameController.text,
+                              phone: _phoneController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            ),
                           );
                         }
                       },
