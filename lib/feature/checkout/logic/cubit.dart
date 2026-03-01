@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
+import 'package:e_commerce/core/events/app_events.dart';
 import 'package:e_commerce/core/utils/enums.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
@@ -91,9 +92,11 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
       userId,
       orderHistoryModel,
     );
-    result.fold(
-      (error) => emit(CheckoutAddOrderHistoryErrorState(error)),
-      (success) => emit(CheckoutAddOrderHistorySuccessState()),
-    );
+    result.fold((error) => emit(CheckoutAddOrderHistoryErrorState(error)), (
+      success,
+    ) {
+      eventBus.fire(OrderConfirmedEvent());
+      emit(CheckoutAddOrderHistorySuccessState());
+    });
   }
 }

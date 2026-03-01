@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
+import 'package:e_commerce/core/events/app_events.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/utils/extensions.dart';
 import 'package:e_commerce/feature/home/data/models/cart_model.dart';
@@ -21,7 +22,11 @@ class HomeCubit extends Cubit<HomeStates> {
     required this.homeRepository,
     this.userModel,
     required this.secureStorageHelper,
-  }) : super(HomeInitialState());
+  }) : super(HomeInitialState()) {
+    eventBus.on<OrderConfirmedEvent>().listen((event) {
+      clearCart();
+    });
+  }
 
   // ignore: strict_top_level_inference
   static HomeCubit get(context) => BlocProvider.of(context);
