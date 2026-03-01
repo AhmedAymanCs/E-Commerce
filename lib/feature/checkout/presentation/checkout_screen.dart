@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/di/service_locator.dart';
+import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
 import 'package:e_commerce/feature/checkout/logic/states.dart';
@@ -26,7 +27,13 @@ class CheckoutScreen extends StatelessWidget {
               return const ConfirmedOrderView();
             }
             if (state is CheckoutMakePaymentSuccessState) {
-              cubit.addOrderHistory(arguments.cartList, arguments.totalPrice);
+              cubit.addOrderHistory(
+                OrderHistoryModel(
+                  products: arguments.cartList,
+                  totalPrice: arguments.totalPrice,
+                  date: DateTime.now(),
+                ),
+              );
             }
             if (state is CheckoutMakePaymentErrorState) {
               Fluttertoast.showToast(

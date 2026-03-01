@@ -4,6 +4,7 @@ import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:dartz/dartz.dart';
+import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 
 abstract class CheckoutRepo {
   ServerResponse<List<AddressModel>> getAddresses(String userId);
@@ -15,8 +16,7 @@ abstract class CheckoutRepo {
   ServerResponse<void> makePayment(double amount, String currency);
   ServerResponse<Unit> addOrderHistory(
     String userId,
-    List<ProductModel> products,
-    double totalPrice,
+    OrderHistoryModel orderHistoryModel,
   );
 }
 
@@ -59,11 +59,10 @@ class CheckoutRepoImpl implements CheckoutRepo {
   @override
   ServerResponse<Unit> addOrderHistory(
     String userId,
-    List<ProductModel> products,
-    double totalPrice,
+    OrderHistoryModel orderHistoryModel,
   ) async {
     try {
-      await remoteDataSource.addOrderHistory(userId, products, totalPrice);
+      await remoteDataSource.addOrderHistory(userId, orderHistoryModel);
       return const Right(unit);
     } catch (error) {
       return Left(error.toString());

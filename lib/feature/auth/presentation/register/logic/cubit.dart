@@ -18,29 +18,11 @@ class RegisterCubit extends Cubit<RegisterStates> {
     emit(ChangePasswordVisibleState());
   }
 
-  void register({
-    required String name,
-    required String phone,
-    required String email,
-    required String password,
-  }) async {
-    final bool isValid = validator(
-      password: password,
-      confirmPassword: password,
-      email: email,
-      name: name,
-      phone: phone,
-    );
+  void register(RegisterParamsModel params) async {
+    final bool isValid = validator(params);
     if (isValid) {
       emit(RegisterLoadingState());
-      final userCredential = await _authRepository.register(
-        RegisterParamsModel(
-          name: name,
-          phone: phone,
-          email: email,
-          password: password,
-        ),
-      );
+      final userCredential = await _authRepository.register(params);
       userCredential.fold(
         (r) => emit(RegisterErrorState(r)),
         (l) => emit(RegisterSuccessState()),
@@ -48,26 +30,21 @@ class RegisterCubit extends Cubit<RegisterStates> {
     }
   }
 
-  bool validator({
-    required String password,
-    required String confirmPassword,
-    required String email,
-    required String name,
-    required String phone,
-  }) {
-    if (name.trim().isEmpty) {
+  bool validator(RegisterParamsModel registerParams) {
+    if (registerParams.name.trim().isEmpty) {
       emit(RegisterErrorState(StringManager.nameHint));
       return false;
-    } else if (email.trim().isEmpty) {
+    } else if (registerParams.email.trim().isEmpty) {
       emit(RegisterErrorState(StringManager.emailHint));
       return false;
-    } else if (phone.trim().isEmpty) {
+    } else if (registerParams.phone.trim().isEmpty) {
       emit(RegisterErrorState(StringManager.phoneHint));
       return false;
-    } else if (password != confirmPassword || password.trim().isEmpty) {
+    } else if (registerParams.password != registerParams.confirmPassword ||
+        registerParams.password.trim().isEmpty) {
       emit(RegisterErrorState(StringManager.passwordNotMatch));
       return false;
-    } else if (password.length < 8) {
+    } else if (registerParams.password.length < 8) {
       emit(RegisterErrorState(StringManager.weekPassword));
       return false;
     } else {

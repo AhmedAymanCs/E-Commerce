@@ -4,6 +4,7 @@ import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/widgets/custom_button.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/core/widgets/logo_with_text.dart';
+import 'package:e_commerce/feature/auth/data/models/register_prams_model.dart';
 import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/presentation/register/logic/cubit.dart';
 import 'package:e_commerce/feature/auth/presentation/register/logic/states.dart';
@@ -148,10 +149,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           return CustomButton(
                             text: StringManager.signUp,
                             onPressed: () => cubit.register(
-                              name: _nameController.text,
-                              phone: _phoneController.text,
-                              email: _emailController.text,
-                              password: _passwordController.text,
+                              RegisterParamsModel(
+                                name: _nameController.text,
+                                phone: _phoneController.text,
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                confirmPassword:
+                                    _confirmPasswordController.text,
+                              ),
                             ),
                           );
                         }

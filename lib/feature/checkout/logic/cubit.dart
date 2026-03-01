@@ -3,6 +3,7 @@ import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
 import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
+import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
 import 'package:e_commerce/feature/checkout/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,14 +86,10 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     );
   }
 
-  Future<void> addOrderHistory(
-    List<ProductModel> products,
-    double totalPrice,
-  ) async {
+  Future<void> addOrderHistory(OrderHistoryModel orderHistoryModel) async {
     final result = await _checkoutRepo.addOrderHistory(
       userId,
-      products,
-      totalPrice,
+      orderHistoryModel,
     );
     result.fold(
       (error) => emit(CheckoutAddOrderHistoryErrorState(error)),
