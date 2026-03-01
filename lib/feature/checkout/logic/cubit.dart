@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
+import 'package:e_commerce/core/utils/enums.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
@@ -18,7 +19,7 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
   int currentStep = 0;
   List<AddressModel> savedAddresses = [];
   AddressModel? selectedAddress;
-  String paymentMethod = 'Cash';
+  CashMethods paymentMethod = CashMethods.onDelivery;
   String userId = "";
 
   Future<void> initUserId() async {
@@ -64,13 +65,13 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     emit(CheckoutStepChanged());
   }
 
-  void selectPaymentMethod(String method) {
+  void selectPaymentMethod(CashMethods method) {
     paymentMethod = method;
     emit(CheckoutPaymentMethodSelected());
   }
 
   Future<void> confirmOrder(double amount) async {
-    if (paymentMethod == 'Stripe') {
+    if (paymentMethod == CashMethods.stripe) {
       makePayment(amount, AppConstants.currency);
     } else {
       emit(CheckoutMakePaymentSuccessState());

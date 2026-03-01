@@ -2,6 +2,7 @@ import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/constants/color_manager.dart';
 import 'package:e_commerce/core/constants/font_manager.dart';
 import 'package:e_commerce/core/constants/string_manager.dart';
+import 'package:e_commerce/core/utils/enums.dart';
 import 'package:e_commerce/core/widgets/cutom_form_field.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/logic/cubit.dart';
@@ -194,8 +195,8 @@ class PaymentStepWidget extends StatelessWidget {
             PaymentMethodTile(
               title: "Credit Card",
               icon: Icons.credit_card,
-              isSelected: cubit.paymentMethod == 'Stripe',
-              onTap: () => cubit.selectPaymentMethod('Stripe'),
+              isSelected: cubit.paymentMethod == CashMethods.stripe,
+              onTap: () => cubit.selectPaymentMethod(CashMethods.stripe),
             ),
 
             SizedBox(height: 12.h),
@@ -203,8 +204,8 @@ class PaymentStepWidget extends StatelessWidget {
             PaymentMethodTile(
               title: "Cash on Delivery",
               icon: Icons.local_shipping,
-              isSelected: cubit.paymentMethod == 'Cash',
-              onTap: () => cubit.selectPaymentMethod('Cash'),
+              isSelected: cubit.paymentMethod == CashMethods.onDelivery,
+              onTap: () => cubit.selectPaymentMethod(CashMethods.onDelivery),
             ),
 
             SizedBox(height: 30.h),
@@ -331,7 +332,7 @@ class SummaryStepWidget extends StatelessWidget {
             SummaryInfoCard(
               title: "Payment Method",
               icon: Icons.payment_outlined,
-              content: cubit.paymentMethod == 'Stripe'
+              content: cubit.paymentMethod == CashMethods.stripe
                   ? "Credit Card"
                   : "Cash on Delivery",
             ),
