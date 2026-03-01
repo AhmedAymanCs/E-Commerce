@@ -3,48 +3,44 @@ import 'package:e_commerce/feature/auth/data/repository/auth_repository.dart';
 import 'package:e_commerce/feature/auth/presentation/login/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginCubit extends Cubit<LoginStates> {
+class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _authRepository;
-  LoginCubit(this._authRepository) : super(LoginInitialState());
+  LoginCubit(this._authRepository) : super(LoginState());
 
   // ignore: strict_top_level_inference
   static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
 
-  bool passwordObscure = true;
   bool rememberMe = true;
 
   void changePasswordVisible() {
-    passwordObscure = !passwordObscure;
-    emit(ChangePasswordVisibleState());
+    emit(state.copyWith(passwordObscure: !state.passwordObscure));
   }
 
   void changeRememberMe() {
-    rememberMe = !rememberMe;
-    emit(ChangeRememberMeState());
+    emit(LoginState(rememberMe: !rememberMe));
   }
 
   Future<void> login({required String email, required String password}) async {
     final bool isValid = validator(email: email, password: password);
     if (isValid) {
-      emit(LoginLoadingState());
+      emit(LoginState(status: const FormLoading()));
       final userCredential = await _authRepository.login(
         email: email,
         password: password,
         rememberMe: rememberMe,
       );
-      userCredential.fold(
-        (r) => emit(LoginErrorState(r)),
-        (l) => emit(LoginSuccessState(l)),
-      );
+      userCredential.fold((r) => emit(LoginState(status: FormFailure(r))), (l) {
+        emit(LoginState(status: FormSuccess(l)));
+      });
     }
   }
 
   bool validator({required String email, required String password}) {
     if (email.trim().isEmpty) {
-      emit(LoginErrorState(StringManager.emailHint));
+      emit(LoginState(status: FormFailure(StringManager.emailHint)));
       return false;
     } else if (password.trim().isEmpty) {
-      emit(LoginErrorState(StringManager.passwordHint));
+      emit(LoginState(status: FormFailure(StringManager.passwordHint)));
       return false;
     } else {
       return true;

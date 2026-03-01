@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/splash/logic/states.dart';
@@ -25,7 +26,9 @@ class SplashCubit extends Cubit<SplashStates> {
 
   Future<void> getStoredUserSession() async {
     try {
-      final String? sessionData = await _storage.getData(key: 'user_session');
+      final String? sessionData = await _storage.getData(
+        key: AppConstants.userSession,
+      );
       if (sessionData != null) {
         final userModel = UserModel.fromJson(jsonDecode(sessionData));
         emit(SplashAuthenticatedState(userModel));

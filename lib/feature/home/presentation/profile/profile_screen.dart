@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 SizedBox(height: 15.h),
                 Text(
-                  HomeCubit.get(context).userModel.name!,
+                  HomeCubit.get(context).userModel!.name!,
                   style: TextStyle(
                     fontSize: FontSize.s22,
                     fontWeight: FontWeightManager.bold,

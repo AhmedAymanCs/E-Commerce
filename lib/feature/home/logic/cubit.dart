@@ -15,11 +15,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
   final HomeRepository homeRepository;
-  final UserModel userModel;
+  final UserModel? userModel;
   final SecureStorageHelper secureStorageHelper;
   HomeCubit({
     required this.homeRepository,
-    required this.userModel,
+    this.userModel,
     required this.secureStorageHelper,
   }) : super(HomeInitialState());
 
@@ -34,7 +34,7 @@ class HomeCubit extends Cubit<HomeStates> {
   int currentCategoryIndex = 0;
 
   List<Widget> get pages => [
-    HomePage(userModel: userModel),
+    HomePage(userModel: userModel!),
     const WishlistPage(),
     const CartPage(),
     const ProfilePage(),

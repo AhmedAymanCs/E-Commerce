@@ -53,7 +53,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     hint: StringManager.emailHint,
                   ),
                   const SizedBox(height: 20.0),
-                  BlocListener<ForgetPasswordCubit, ForgetPasswordStates>(
+                  BlocConsumer<ForgetPasswordCubit, ForgetPasswordStates>(
                     listener: (context, state) {
                       if (state is ForgetPasswordSuccessState) {
                         Navigator.pushNamedAndRemoveUntil(
@@ -73,26 +73,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         );
                       }
                     },
-                    child:
-                        BlocBuilder<ForgetPasswordCubit, ForgetPasswordStates>(
-                          buildWhen: (previos, current) {
-                            return current is ForgetPasswordLoadingState ||
-                                current is ForgetPasswordErrorState;
-                          },
-                          builder: (context, state) {
-                            ForgetPasswordCubit cubit = ForgetPasswordCubit.get(
-                              context,
-                            );
-                            if (state is ForgetPasswordLoadingState) {
-                              return const CircularProgressIndicator();
-                            }
-                            return CustomButton(
-                              text: StringManager.forgotPassword,
-                              onPressed: () =>
-                                  cubit.forgetPassword(_emailController.text),
-                            );
-                          },
-                        ),
+                    buildWhen: (previos, current) {
+                      return current is ForgetPasswordLoadingState ||
+                          current is ForgetPasswordErrorState;
+                    },
+                    builder: (context, state) {
+                      ForgetPasswordCubit cubit = ForgetPasswordCubit.get(
+                        context,
+                      );
+                      if (state is ForgetPasswordLoadingState) {
+                        return const CircularProgressIndicator();
+                      }
+                      return CustomButton(
+                        text: StringManager.forgotPassword,
+                        onPressed: () =>
+                            cubit.forgetPassword(_emailController.text),
+                      );
+                    },
                   ),
                 ],
               ),

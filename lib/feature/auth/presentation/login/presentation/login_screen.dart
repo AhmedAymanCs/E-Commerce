@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 15.h),
                   //Password field
-                  BlocBuilder<LoginCubit, LoginStates>(
+                  BlocBuilder<LoginCubit, LoginState>(
                     builder: (context, state) {
                       LoginCubit cubit = LoginCubit.get(context);
                       return CustomFormField(
@@ -70,13 +70,13 @@ class _LoginPageState extends State<LoginPage> {
                         hint: StringManager.passwordHint,
                         title: StringManager.password,
                         preicon: Icons.lock_outlined,
-                        obscure: cubit.passwordObscure,
+                        obscure: state.passwordObscure,
                         onPressed: cubit.changePasswordVisible,
                         keyboardType: TextInputType.visiblePassword,
                       );
                     },
                   ),
-                  BlocBuilder<LoginCubit, LoginStates>(
+                  BlocBuilder<LoginCubit, LoginState>(
                     builder: (context, state) {
                       LoginCubit cubit = LoginCubit.get(context);
                       return RememberMeAndForgotPassRow(
@@ -92,19 +92,23 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   SizedBox(height: 20.h),
-                  BlocListener<LoginCubit, LoginStates>(
+                  BlocConsumer<LoginCubit, LoginState>(
                     listener: (context, state) {
-                      if (state is LoginSuccessState) {
+                      if (state.status is FormSuccess) {
+                        final userModel =
+                            (state.status as FormSuccess).userModel;
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           Routes.homeRoute,
                           (_) => false,
-                          arguments: state.userModel,
+                          arguments: userModel,
                         );
                       }
-                      if (state is LoginErrorState) {
+                      if (state.status is FormFailure) {
+                        final errorMessage =
+                            (state.status as FormFailure).message;
                         Fluttertoast.showToast(
-                          msg: state.errorMessage,
+                          msg: errorMessage,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -113,26 +117,24 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       }
                     },
-                    child: BlocBuilder<LoginCubit, LoginStates>(
-                      buildWhen: (previous, current) {
-                        return current is LoginLoadingState ||
-                            current is LoginErrorState;
-                      },
-                      builder: (context, state) {
-                        LoginCubit cubit = LoginCubit.get(context);
-                        if (state is LoginLoadingState) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          return CustomButton(
-                            text: StringManager.login,
-                            onPressed: () => cubit.login(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                    buildWhen: (previous, current) {
+                      return current.status is FormLoading ||
+                          current.status is FormFailure;
+                    },
+                    builder: (context, state) {
+                      LoginCubit cubit = LoginCubit.get(context);
+                      if (state.status is FormLoading) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return CustomButton(
+                          text: StringManager.login,
+                          onPressed: () => cubit.login(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 20.h),
                   RegisterRow(

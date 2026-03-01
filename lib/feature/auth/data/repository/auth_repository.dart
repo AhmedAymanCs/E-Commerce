@@ -41,7 +41,6 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
-
       if (userCredential.user != null) {
         final userDoc = await firestore
             .collection(AppConstants.usersCollectionName)
@@ -49,7 +48,10 @@ class AuthRepositoryImpl implements AuthRepository {
             .get();
 
         if (userDoc.exists && userDoc.data() != null) {
-          final userModel = UserModel.fromJson(userDoc.data()!);
+          final userModel = UserModel.fromJson({
+            ...userDoc.data()!,
+            'uId': userDoc.id,
+          });
 
           if (rememberMe) {
             String sessionData = jsonEncode(userModel.toJson());
