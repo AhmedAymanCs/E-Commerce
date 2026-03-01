@@ -16,7 +16,7 @@ abstract class CheckoutRepo {
   ServerResponse<Unit> addOrderHistory(
     String userId,
     List<ProductModel> products,
-    totalPrice,
+    double totalPrice,
   );
 }
 
@@ -60,7 +60,7 @@ class CheckoutRepoImpl implements CheckoutRepo {
   ServerResponse<Unit> addOrderHistory(
     String userId,
     List<ProductModel> products,
-    totalPrice,
+    double totalPrice,
   ) async {
     try {
       await remoteDataSource.addOrderHistory(userId, products, totalPrice);

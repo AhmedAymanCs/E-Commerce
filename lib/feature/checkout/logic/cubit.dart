@@ -85,7 +85,10 @@ class CheckoutCubit extends Cubit<CheckoutStates> {
     );
   }
 
-  Future<void> addOrderHistory(List<ProductModel> products, totalPrice) async {
+  Future<void> addOrderHistory(
+    List<ProductModel> products,
+    double totalPrice,
+  ) async {
     final result = await _checkoutRepo.addOrderHistory(
       userId,
       products,

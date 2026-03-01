@@ -12,7 +12,7 @@ abstract class CheckoutRemoteDataSource {
   Future<void> addOrderHistory(
     String userId,
     List<ProductModel> products,
-    totalPrice,
+    double totalPrice,
   );
 }
 
@@ -49,7 +49,7 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
   Future<void> addOrderHistory(
     String userId,
     List<ProductModel> products,
-    totalPrice,
+    double totalPrice,
   ) async {
     await _firestore
         .collection(AppConstants.usersCollectionName)
