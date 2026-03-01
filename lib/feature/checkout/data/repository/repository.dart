@@ -1,4 +1,3 @@
-import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/core/stripe_payment/payment_manager.dart';
 import 'package:e_commerce/core/utils/typedef.dart';
 import 'package:e_commerce/feature/checkout/data/data_source/checkout_source.dart';

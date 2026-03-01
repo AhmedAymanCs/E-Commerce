@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 

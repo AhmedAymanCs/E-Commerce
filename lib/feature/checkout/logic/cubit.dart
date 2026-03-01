@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/di/service_locator.dart';
-import 'package:e_commerce/core/models/product_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/address_model.dart';
 import 'package:e_commerce/feature/checkout/data/models/order_history_model.dart';
 import 'package:e_commerce/feature/checkout/data/repository/repository.dart';
