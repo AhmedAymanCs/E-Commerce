@@ -56,22 +56,4 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
         .doc(DateTime.now().toIso8601String())
         .set(orderHistoryModel.toJson());
   }
-
-  // @override
-  // Future<void> addOrderHistory(
-  //   String userId,
-  //   List<ProductModel> products,
-  //   double totalPrice,
-  // ) async {
-  //   await _firestore
-  //       .collection(AppConstants.usersCollectionName)
-  //       .doc(userId)
-  //       .collection(AppConstants.orderHistoryCollectionName)
-  //       .doc(DateTime.now().toIso8601String())
-  //       .set({
-  //         'products': products.map((product) => product.toJson()).toList(),
-  //         'orderDate': DateTime.now().toIso8601String(),
-  //         'totalPrice': totalPrice,
-  //       });
-  // }
 }
