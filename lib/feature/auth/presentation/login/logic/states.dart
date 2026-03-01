@@ -22,6 +22,10 @@ import 'package:equatable/equatable.dart';
 
 // class ChangeRememberMeState extends LoginStates {}
 
+abstract class FormStatus extends Equatable {
+  const FormStatus();
+}
+
 class LoginState extends Equatable {
   final bool passwordObscure;
   final bool rememberMe;
@@ -47,10 +51,6 @@ class LoginState extends Equatable {
 
   @override
   List<Object?> get props => [passwordObscure, rememberMe, status];
-}
-
-abstract class FormStatus extends Equatable {
-  const FormStatus();
 }
 
 class FormInitial extends FormStatus {

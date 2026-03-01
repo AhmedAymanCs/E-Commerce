@@ -88,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 15.h),
                   //Password field
-                  BlocBuilder<RegisterCubit, RegisterStates>(
+                  BlocBuilder<RegisterCubit, RegisterState>(
                     builder: (context, state) {
                       RegisterCubit cubit = RegisterCubit.get(context);
                       return CustomFormField(
@@ -96,38 +96,39 @@ class _RegisterPageState extends State<RegisterPage> {
                         hint: StringManager.passwordHint,
                         title: StringManager.password,
                         preicon: Icons.lock_outlined,
-                        obscure: cubit.passwordObscure,
+                        obscure: state.passwordObscure,
                         onPressed: cubit.changePasswordVisible,
                       );
                     },
                   ),
                   SizedBox(height: 20.h),
                   //Confirm Password field
-                  BlocBuilder<RegisterCubit, RegisterStates>(
+                  BlocBuilder<RegisterCubit, RegisterState>(
                     builder: (context, state) {
-                      RegisterCubit cubit = RegisterCubit.get(context);
                       return CustomFormField(
                         controller: _confirmPasswordController,
                         hint: StringManager.confirmPasswordHint,
                         title: StringManager.confirmPassword,
                         preicon: Icons.lock_outlined,
-                        obscure: cubit.passwordObscure,
+                        obscure: state.passwordObscure,
                       );
                     },
                   ),
                   SizedBox(height: 50.h),
-                  BlocListener<RegisterCubit, RegisterStates>(
+                  BlocListener<RegisterCubit, RegisterState>(
                     listener: (context, state) {
-                      if (state is RegisterSuccessState) {
+                      if (state.status is FormSuccess) {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           Routes.loginRoute,
                           (_) => false,
                         );
                       }
-                      if (state is RegisterErrorState) {
+                      if (state.status is FormFailure) {
+                        final errorMessage =
+                            (state.status as FormFailure).errorMessage;
                         Fluttertoast.showToast(
-                          msg: state.errorMessage,
+                          msg: errorMessage,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -136,14 +137,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                       }
                     },
-                    child: BlocBuilder<RegisterCubit, RegisterStates>(
+                    child: BlocBuilder<RegisterCubit, RegisterState>(
                       buildWhen: (previous, current) {
-                        return current is RegisterLoadingState ||
-                            current is RegisterErrorState;
+                        return current.status is FormLoading ||
+                            current.status is FormFailure;
                       },
                       builder: (context, state) {
                         RegisterCubit cubit = RegisterCubit.get(context);
-                        if (state is RegisterLoadingState) {
+                        if (state.status is FormLoading) {
                           return const CircularProgressIndicator();
                         } else {
                           return CustomButton(
