@@ -7,6 +7,7 @@ import 'package:e_commerce/feature/checkout/presentation/shared_widgets.dart';
 import 'package:e_commerce/core/models/checkout_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -15,18 +16,20 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CheckoutCubit(getIt<CheckoutRepo>())
-        ..initUserId()
-        ..fetchAddresses(),
+      create: (context) => CheckoutCubit(
+        checkoutRepo: getIt<CheckoutRepo>(),
+        storage: getIt<FlutterSecureStorage>(),
+        userModel: arguments.userModel,
+      )..fetchAddresses(),
       child: Scaffold(
         appBar: AppBar(title: const Text("Checkout")),
-        body: BlocBuilder<CheckoutCubit, CheckoutStates>(
+        body: BlocBuilder<CheckoutCubit, CheckOutState>(
           builder: (context, state) {
-            CheckoutCubit cubit = CheckoutCubit.get(context);
-            if (state is CheckoutAddOrderHistorySuccessState) {
+            CheckoutCubit cubit = context.read<CheckoutCubit>();
+            if (state.status is CheckoutAddOrderHistorySuccessState) {
               return const ConfirmedOrderView();
             }
-            if (state is CheckoutMakePaymentSuccessState) {
+            if (state.status is CheckoutMakePaymentSuccessState) {
               cubit.addOrderHistory(
                 OrderHistoryModel(
                   products: arguments.cartList,
@@ -35,9 +38,10 @@ class CheckoutScreen extends StatelessWidget {
                 ),
               );
             }
-            if (state is CheckoutMakePaymentErrorState) {
+            if (state.status is FormFailure) {
+              final error = (state.status as FormFailure).error;
               Fluttertoast.showToast(
-                msg: state.error,
+                msg: error,
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
@@ -45,9 +49,9 @@ class CheckoutScreen extends StatelessWidget {
             }
             return Stepper(
               type: StepperType.vertical,
-              currentStep: cubit.currentStep,
+              currentStep: state.step.index,
               onStepContinue: () {
-                if (cubit.currentStep == 0 && cubit.selectedAddress == null) {
+                if (state.step.index == 0 && state.selectedAddress == null) {
                   Fluttertoast.showToast(
                     msg: "Please Select Address",
                     timeInSecForIosWeb: 1,
@@ -56,21 +60,21 @@ class CheckoutScreen extends StatelessWidget {
                   );
                   return;
                 }
-                if (cubit.currentStep < 2) {
-                  cubit.changeStep(cubit.currentStep + 1);
+                if (state.step.index < 2) {
+                  cubit.changeStep(state.step.index + 1);
                 } else {
                   cubit.confirmOrder(arguments.totalPrice);
                 }
               },
               onStepCancel: () {
-                if (cubit.currentStep > 0) {
-                  cubit.changeStep(cubit.currentStep - 1);
+                if (state.step.index > 0) {
+                  cubit.changeStep(state.step.index - 1);
                 } else {
                   Navigator.pop(context);
                 }
               },
               onStepTapped: (step) {
-                if (step < cubit.currentStep) {
+                if (step < state.step.index) {
                   cubit.changeStep(step);
                 } else {
                   Fluttertoast.showToast(
@@ -83,23 +87,23 @@ class CheckoutScreen extends StatelessWidget {
               },
               steps: [
                 Step(
-                  isActive: cubit.currentStep >= 0,
-                  state: cubit.currentStep > 0
+                  isActive: state.step.index >= 0,
+                  state: state.step.index > 0
                       ? StepState.complete
                       : StepState.indexed,
                   title: const Text("Address"),
                   content: const AddressStepWidget(),
                 ),
                 Step(
-                  isActive: cubit.currentStep >= 1,
-                  state: cubit.currentStep > 1
+                  isActive: state.step.index >= 1,
+                  state: state.step.index > 1
                       ? StepState.complete
                       : StepState.indexed,
                   title: const Text("Payment"),
                   content: PaymentStepWidget(totalAmount: arguments.totalPrice),
                 ),
                 Step(
-                  isActive: cubit.currentStep >= 2,
+                  isActive: state.step.index >= 2,
                   title: const Text("Summary"),
                   content: SummaryStepWidget(totalPrice: arguments.totalPrice),
                 ),

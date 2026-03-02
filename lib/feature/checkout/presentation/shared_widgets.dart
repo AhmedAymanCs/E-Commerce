@@ -45,9 +45,9 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CheckoutCubit, CheckoutStates>(
+    return BlocBuilder<CheckoutCubit, CheckOutState>(
       builder: (context, state) {
-        CheckoutCubit cubit = CheckoutCubit.get(context);
+        CheckoutCubit cubit = context.read<CheckoutCubit>();
         return Form(
           key: formKey,
           child: Column(
@@ -109,9 +109,9 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
               ),
               const SizedBox(height: 10),
 
-              if (state is GetAddressesLoading)
+              if (state is FormLoading)
                 const Center(child: CircularProgressIndicator())
-              else if (cubit.savedAddresses.isEmpty)
+              else if (state.savedAddress.isEmpty)
                 const Text(
                   "No saved addresses yet.",
                   style: TextStyle(color: ColorManager.gray500),
@@ -120,17 +120,16 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cubit.savedAddresses.length,
+                  itemCount: state.savedAddress.length,
                   itemBuilder: (context, index) {
-                    final address = cubit.savedAddresses[index];
-
+                    final address = state.savedAddress[index];
                     return RadioListTile<AddressModel>(
                       contentPadding: EdgeInsets.zero,
                       title: Text(address.street),
                       subtitle: Text("${address.city} - ${address.phone}"),
                       value: address,
                       // ignore: deprecated_member_use
-                      groupValue: cubit.selectedAddress,
+                      groupValue: state.selectedAddress,
                       // ignore: deprecated_member_use
                       onChanged: (val) {
                         if (val != null) {
@@ -147,7 +146,7 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
 
               const SizedBox(height: 20),
 
-              if (cubit.selectedAddress == null)
+              if (state.selectedAddress == null)
                 ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
@@ -159,6 +158,10 @@ class _AddressStepWidgetState extends State<AddressStepWidget> {
                           zipCode: zipController.text,
                         ),
                       );
+                      cityController.clear();
+                      streetController.clear();
+                      zipController.clear();
+                      phoneController.clear();
                     }
                   },
                   child: const Text("Save This Address"),
@@ -178,9 +181,9 @@ class PaymentStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CheckoutCubit, CheckoutStates>(
+    return BlocBuilder<CheckoutCubit, CheckOutState>(
       builder: (context, state) {
-        CheckoutCubit cubit = CheckoutCubit.get(context);
+        CheckoutCubit cubit = context.read<CheckoutCubit>();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -195,7 +198,7 @@ class PaymentStepWidget extends StatelessWidget {
             PaymentMethodTile(
               title: "Credit Card",
               icon: Icons.credit_card,
-              isSelected: cubit.paymentMethod == CashMethods.stripe,
+              isSelected: state.method == CashMethods.stripe,
               onTap: () => cubit.selectPaymentMethod(CashMethods.stripe),
             ),
 
@@ -204,7 +207,7 @@ class PaymentStepWidget extends StatelessWidget {
             PaymentMethodTile(
               title: "Cash on Delivery",
               icon: Icons.local_shipping,
-              isSelected: cubit.paymentMethod == CashMethods.onDelivery,
+              isSelected: state.method == CashMethods.onDelivery,
               onTap: () => cubit.selectPaymentMethod(CashMethods.onDelivery),
             ),
 
@@ -304,10 +307,9 @@ class SummaryStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CheckoutCubit, CheckoutStates>(
+    return BlocBuilder<CheckoutCubit, CheckOutState>(
       builder: (context, state) {
-        final cubit = CheckoutCubit.get(context);
-        final address = cubit.selectedAddress;
+        final address = state.selectedAddress;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -332,7 +334,7 @@ class SummaryStepWidget extends StatelessWidget {
             SummaryInfoCard(
               title: "Payment Method",
               icon: Icons.payment_outlined,
-              content: cubit.paymentMethod == CashMethods.stripe
+              content: state.method == CashMethods.stripe
                   ? "Credit Card"
                   : "Cash on Delivery",
             ),

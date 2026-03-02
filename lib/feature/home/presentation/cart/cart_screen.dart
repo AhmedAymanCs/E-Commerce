@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/constants/color_manager.dart';
+import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/core/routing/routes.dart';
 import 'package:e_commerce/core/models/checkout_model.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
@@ -9,7 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+  final UserModel userModel;
+  const CartPage({super.key, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class CartPage extends StatelessWidget {
                         arguments: CheckoutArguments(
                           totalPrice: cubit.cartModel.total,
                           cartList: cubit.cartList,
+                          userModel: userModel,
                         ),
                       ),
                     ),

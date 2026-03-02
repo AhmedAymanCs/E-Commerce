@@ -41,7 +41,7 @@ class HomeCubit extends Cubit<HomeStates> {
   List<Widget> get pages => [
     HomePage(userModel: userModel!),
     const WishlistPage(),
-    const CartPage(),
+    CartPage(userModel: userModel!),
     const ProfilePage(),
   ]; //initialize bottom navigation bar pages
   int navBarCurrentIndex = 0; //initialize nav bar index
