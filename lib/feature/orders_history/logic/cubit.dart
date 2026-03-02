@@ -1,4 +1,3 @@
-import 'package:e_commerce/feature/orders_history/data/models/order_model.dart';
 import 'package:e_commerce/feature/orders_history/data/repository/repositroy.dart';
 import 'package:e_commerce/feature/orders_history/logic/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +9,6 @@ class OrdersHistoryCubit extends Cubit<OrdersHistoryStates> {
 
   // ignore: strict_top_level_inference
   static OrdersHistoryCubit get(context) => BlocProvider.of(context);
-  List<OrderModel> ordersHistory = [];
   Future<void> getOrdersHistory() async {
     emit(OrdersHistoryLoading());
     final result = await _ordersHistoryRepository.getOrdersHistory();
