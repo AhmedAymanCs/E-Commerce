@@ -78,9 +78,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           current is ForgetPasswordErrorState;
                     },
                     builder: (context, state) {
-                      ForgetPasswordCubit cubit = ForgetPasswordCubit.get(
-                        context,
-                      );
+                      ForgetPasswordCubit cubit = context
+                          .read<ForgetPasswordCubit>();
                       if (state is ForgetPasswordLoadingState) {
                         return const CircularProgressIndicator();
                       }

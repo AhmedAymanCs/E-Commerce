@@ -8,8 +8,6 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordStates> {
   ForgetPasswordCubit(this._authRepository)
     : super(ForgetPasswordInitialState());
 
-  // ignore: strict_top_level_inference
-  static ForgetPasswordCubit get(context) => BlocProvider.of(context);
   Future<void> forgetPassword(String email) async {
     if (!validateEmail(email)) {
       return;
