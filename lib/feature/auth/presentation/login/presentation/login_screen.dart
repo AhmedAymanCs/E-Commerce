@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   //Password field
                   BlocBuilder<LoginCubit, LoginState>(
                     builder: (context, state) {
-                      LoginCubit cubit = LoginCubit.get(context);
+                      LoginCubit cubit = context.read<LoginCubit>();
                       return CustomFormField(
                         controller: _passwordController,
                         hint: StringManager.passwordHint,
@@ -78,10 +78,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   BlocBuilder<LoginCubit, LoginState>(
                     builder: (context, state) {
-                      LoginCubit cubit = LoginCubit.get(context);
+                      LoginCubit cubit = context.read<LoginCubit>();
                       return RememberMeAndForgotPassRow(
-                        rememberMeValue: cubit.rememberMe,
-                        checkBoxOnPressed: (_) => cubit.changeRememberMe(),
+                        rememberMeValue: state.rememberMe,
+                        checkBoxOnPressed: (value) =>
+                            cubit.changeRememberMe(value!),
                         forgotPassOnPressed: () {
                           Navigator.pushNamed(
                             context,
@@ -122,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                           current.status is FormFailure;
                     },
                     builder: (context, state) {
-                      LoginCubit cubit = LoginCubit.get(context);
+                      LoginCubit cubit = context.read<LoginCubit>();
                       if (state.status is FormLoading) {
                         return const CircularProgressIndicator();
                       } else {

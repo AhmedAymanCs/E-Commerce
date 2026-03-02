@@ -9,9 +9,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit(this._authRepository)
     : super(RegisterState(status: const FormInitial()));
 
-  // ignore: strict_top_level_inference
-  static RegisterCubit get(context) => BlocProvider.of(context);
-
   void changePasswordVisible() {
     emit(state.copyWith(passwordObscure: !state.passwordObscure));
   }

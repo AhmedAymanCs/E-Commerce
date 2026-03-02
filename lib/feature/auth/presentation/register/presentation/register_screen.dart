@@ -90,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   //Password field
                   BlocBuilder<RegisterCubit, RegisterState>(
                     builder: (context, state) {
-                      RegisterCubit cubit = RegisterCubit.get(context);
+                      RegisterCubit cubit = context.read<RegisterCubit>();
                       return CustomFormField(
                         controller: _passwordController,
                         hint: StringManager.passwordHint,
@@ -143,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             current.status is FormFailure;
                       },
                       builder: (context, state) {
-                        RegisterCubit cubit = RegisterCubit.get(context);
+                        RegisterCubit cubit = context.read<RegisterCubit>();
                         if (state.status is FormLoading) {
                           return const CircularProgressIndicator();
                         } else {

@@ -33,7 +33,7 @@ class LoginState extends Equatable {
 
   const LoginState({
     this.passwordObscure = true,
-    this.rememberMe = false,
+    this.rememberMe = true,
     this.status = const FormInitial(),
   });
 

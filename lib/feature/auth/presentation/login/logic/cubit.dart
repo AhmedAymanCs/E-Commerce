@@ -7,17 +7,12 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _authRepository;
   LoginCubit(this._authRepository) : super(LoginState());
 
-  // ignore: strict_top_level_inference
-  static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
-
-  bool rememberMe = true;
-
   void changePasswordVisible() {
     emit(state.copyWith(passwordObscure: !state.passwordObscure));
   }
 
-  void changeRememberMe() {
-    emit(LoginState(rememberMe: !rememberMe));
+  void changeRememberMe(bool value) {
+    emit(LoginState(rememberMe: value));
   }
 
   Future<void> login({required String email, required String password}) async {
@@ -27,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
       final userCredential = await _authRepository.login(
         email: email,
         password: password,
-        rememberMe: rememberMe,
+        rememberMe: state.rememberMe,
       );
       userCredential.fold((r) => emit(LoginState(status: FormFailure(r))), (l) {
         emit(LoginState(status: FormSuccess(l)));
