@@ -8,9 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SplashCubit extends Cubit<SplashStates> {
   SplashCubit(this._storage) : super(SplashInitialState());
 
-  // ignore: strict_top_level_inference
-  static SplashCubit get(context) => BlocProvider.of(context);
-
   final SecureStorageHelper _storage;
 
   void startSplash() async {
