@@ -10,10 +10,10 @@ class WishlistPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeStates>(
+    return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final HomeCubit cubit = HomeCubit.get(context);
-        if (cubit.wishList.isEmpty) {
+        final HomeCubit cubit = context.read<HomeCubit>();
+        if (state.wishList.isEmpty) {
           return const Center(child: Text("No Wish List"));
         }
         return Column(
@@ -22,15 +22,15 @@ class WishlistPage extends StatelessWidget {
               child: ListView.separated(
                 padding: EdgeInsets.all(16.w),
                 itemBuilder: (context, index) => WishlistItem(
-                  product: cubit.wishList[index],
+                  product: state.wishList[index],
                   addCartOnPressed: () =>
-                      cubit.addToCart(cubit.wishList[index]),
+                      cubit.addToCart(state.wishList[index]),
                   deleteOnPressed: () =>
-                      cubit.toggleWishlist(cubit.wishList[index]),
+                      cubit.toggleWishlist(state.wishList[index]),
                 ),
 
                 separatorBuilder: (context, index) => SizedBox(height: 15.h),
-                itemCount: cubit.wishList.length,
+                itemCount: state.wishList.length,
               ),
             ),
           ],

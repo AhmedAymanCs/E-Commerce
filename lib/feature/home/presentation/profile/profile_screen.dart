@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeStates>(
+    return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(15.0),
@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 SizedBox(height: 15.h),
                 Text(
-                  HomeCubit.get(context).userModel!.name!,
+                  context.read<HomeCubit>().userModel!.name!,
                   style: TextStyle(
                     fontSize: FontSize.s22,
                     fontWeight: FontWeightManager.bold,

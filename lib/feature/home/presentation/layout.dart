@@ -6,6 +6,10 @@ import 'package:e_commerce/core/models/user_model.dart';
 import 'package:e_commerce/feature/home/data/repository/repository.dart';
 import 'package:e_commerce/feature/home/logic/cubit.dart';
 import 'package:e_commerce/feature/home/logic/states.dart';
+import 'package:e_commerce/feature/home/presentation/cart/cart_screen.dart';
+import 'package:e_commerce/feature/home/presentation/home/home_screen.dart';
+import 'package:e_commerce/feature/home/presentation/profile/profile_screen.dart';
+import 'package:e_commerce/feature/home/presentation/wish_list/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,7 +22,12 @@ class Layout extends StatelessWidget {
     required this.userModel,
     required this.secureStorageHelper,
   });
-
+  List<Widget> get pages => [
+    HomePage(userModel: userModel),
+    const WishlistPage(),
+    CartPage(userModel: userModel),
+    const ProfilePage(),
+  ];
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -27,10 +36,10 @@ class Layout extends StatelessWidget {
         userModel: userModel,
         secureStorageHelper: secureStorageHelper,
       )..getAllHomeData(),
-      child: BlocConsumer<HomeCubit, HomeStates>(
+      child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {},
         builder: (context, state) {
-          final HomeCubit cubit = HomeCubit.get(context);
+          final HomeCubit cubit = context.read<HomeCubit>();
           return Scaffold(
             appBar: AppBar(
               leading: SvgPicture.asset(ImageManager.logo, fit: BoxFit.contain),
@@ -43,8 +52,8 @@ class Layout extends StatelessWidget {
               ],
             ),
             body: IndexedStack(
-              index: cubit.navBarCurrentIndex,
-              children: cubit.pages,
+              index: state.navBarCurrentIndex,
+              children: pages,
             ),
 
             bottomNavigationBar: BottomNavigationBar(
@@ -68,7 +77,7 @@ class Layout extends StatelessWidget {
                   label: StringManager.profile,
                 ),
               ],
-              currentIndex: cubit.navBarCurrentIndex,
+              currentIndex: state.navBarCurrentIndex,
             ),
           );
         },

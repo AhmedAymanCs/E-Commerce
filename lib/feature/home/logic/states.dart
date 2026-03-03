@@ -1,72 +1,113 @@
 import 'package:e_commerce/core/models/product_model.dart';
+import 'package:e_commerce/feature/home/data/models/cart_model.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class HomeStates {}
-
-class HomeInitialState extends HomeStates {}
-
-class HomeChangeNavBarIndexState extends HomeStates {}
-
-class HomeGetProductsLoadingState extends HomeStates {}
-
-class HomeChangeCategoryState extends HomeStates {}
-
-class HomeGetProductsSuccessState extends HomeStates {
+class HomeState extends Equatable {
+  final FormState status;
+  final int currentCategoryIndex;
+  final int navBarCurrentIndex;
   final List<ProductModel> products;
-  HomeGetProductsSuccessState(this.products);
+  final List<ProductModel> wishList;
+  final List<ProductModel> cartList;
+  final List<String> categoriesList;
+  final CartModel cartModel;
+  const HomeState({
+    this.status = const FormInitialState(),
+    this.currentCategoryIndex = 0,
+    this.navBarCurrentIndex = 0,
+    this.products = const [],
+    this.categoriesList = const [],
+    this.wishList = const [],
+    this.cartList = const [],
+    this.cartModel = const CartModel(
+      discount: 0,
+      subtotal: 0,
+      tax: 0,
+      total: 0,
+    ),
+  });
+
+  HomeState copyWith({
+    FormState? status,
+    int? currentCategoryIndex,
+    int? navBarCurrentIndex,
+    List<ProductModel>? products,
+    List<String>? categoriesList,
+    List<ProductModel>? wishList,
+    List<ProductModel>? cartList,
+    CartModel? cartModel,
+  }) {
+    return HomeState(
+      status: status ?? this.status,
+      currentCategoryIndex: currentCategoryIndex ?? this.currentCategoryIndex,
+      navBarCurrentIndex: navBarCurrentIndex ?? this.navBarCurrentIndex,
+      products: products ?? this.products,
+      categoriesList: categoriesList ?? this.categoriesList,
+      wishList: wishList ?? this.wishList,
+      cartList: cartList ?? this.cartList,
+      cartModel: cartModel ?? this.cartModel,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    status,
+    currentCategoryIndex,
+    navBarCurrentIndex,
+    products,
+    categoriesList,
+    wishList,
+    cartList,
+    cartModel,
+  ];
 }
 
-class HomeGetProductsErrorState extends HomeStates {
-  final String errorMessage;
-  HomeGetProductsErrorState(this.errorMessage);
+abstract class FormState extends Equatable {
+  const FormState();
 }
 
-class HomeAddToCartSuccessState extends HomeStates {}
-
-class HomeAddToCartErrorState extends HomeStates {
-  final String errorMessage;
-  HomeAddToCartErrorState(this.errorMessage);
+class FormInitialState extends FormState {
+  const FormInitialState();
+  @override
+  List<Object?> get props => [];
 }
 
-class HomeAddToWishListSuccessState extends HomeStates {}
-
-class HomeAddToWishListErrorState extends HomeStates {
-  final String errorMessage;
-  HomeAddToWishListErrorState(this.errorMessage);
+class FormLoadingState extends FormState {
+  @override
+  List<Object?> get props => [];
 }
 
-class GetWishlistLoading extends HomeStates {}
+class FormSuccessState extends FormState {
+  const FormSuccessState();
 
-class GetWishlistSuccess extends HomeStates {
-  final List<ProductModel> wishlist;
-  GetWishlistSuccess(this.wishlist);
+  @override
+  List<Object?> get props => [];
 }
 
-class GetWishlistError extends HomeStates {
+class FormFailureState extends FormState {
   final String message;
-  GetWishlistError(this.message);
+  const FormFailureState(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
 
-class HomeDeleteCartSuccessState extends HomeStates {}
-
-class HomeDeleteCartErrorState extends HomeStates {
-  final String message;
-
-  HomeDeleteCartErrorState(this.message);
+class AddToCartSuccessState extends FormState {
+  const AddToCartSuccessState();
+  @override
+  List<Object?> get props => [];
 }
 
-class HomeMakePaymentSuccessState extends HomeStates {}
-
-class HomeClearCartSuccessState extends HomeStates {}
-
-class HomeUpdateQuantityInCartSuccessState extends HomeStates {}
-
-class HomeMakePaymentErrorState extends HomeStates {
+class AddToCartErrorState extends FormState {
   final String message;
-  HomeMakePaymentErrorState(this.message);
+  const AddToCartErrorState(this.message);
+  @override
+  List<Object?> get props => [message];
 }
 
-class HomeUpdateQuantityInCartErrorState extends HomeStates {
-  final String message;
-
-  HomeUpdateQuantityInCartErrorState(this.message);
+class FormGetProductsSuccess extends FormState {
+  final List<ProductModel> products;
+  const FormGetProductsSuccess(this.products);
+  @override
+  List<Object?> get props => [products];
 }

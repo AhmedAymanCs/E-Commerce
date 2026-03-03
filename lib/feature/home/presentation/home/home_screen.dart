@@ -19,9 +19,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: BlocListener<HomeCubit, HomeStates>(
+      child: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
-          if (state is HomeAddToCartSuccessState) {
+          if (state.status is AddToCartSuccessState) {
             Fluttertoast.showToast(
               msg: StringManager.productAddedToCart,
               backgroundColor: ColorManager.green,
@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
             );
-            if (state is HomeAddToCartErrorState) {
+            if (state is AddToCartErrorState) {
               Fluttertoast.showToast(
                 msg: StringManager.productNotAddedToCart,
                 timeInSecForIosWeb: 1,
@@ -42,9 +42,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<HomeCubit, HomeStates>(
+            BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
-                final HomeCubit cubit = HomeCubit.get(context);
+                final HomeCubit cubit = context.read<HomeCubit>();
                 return CustomFormField(
                   hint: StringManager.searchHint,
                   preicon: Icons.search,
@@ -58,18 +58,18 @@ class HomePage extends StatelessWidget {
               },
             ),
             SizedBox(height: 10.h),
-            BlocBuilder<HomeCubit, HomeStates>(
+            BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
-                HomeCubit cubit = HomeCubit.get(context);
+                HomeCubit cubit = context.read<HomeCubit>();
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
                       ...List.generate(
-                        cubit.categoriesList.length,
+                        state.categoriesList.length,
                         (index) => CategoryCard(
-                          title: cubit.categoriesList[index],
-                          isSelected: cubit.currentCategoryIndex == index,
+                          title: state.categoriesList[index],
+                          isSelected: state.currentCategoryIndex == index,
                           onPressed: () => cubit.selectCategory(index),
                         ),
                       ),
@@ -78,23 +78,25 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            BlocBuilder<HomeCubit, HomeStates>(
+            BlocBuilder<HomeCubit, HomeState>(
               buildWhen: (previous, current) {
-                if (current is HomeGetProductsLoadingState &&
-                    HomeCubit.get(context).productsList.isNotEmpty) {
-                  return false;
-                }
-                return current is HomeGetProductsLoadingState ||
-                    current is HomeGetProductsErrorState ||
-                    current is HomeGetProductsSuccessState;
+                return current.status is FormLoadingState ||
+                    current.status is FormFailureState ||
+                    current.status is FormGetProductsSuccess;
               },
               builder: (context, state) {
-                final HomeCubit cubit = HomeCubit.get(context);
-                if (state is HomeGetProductsErrorState) {
-                  return Expanded(
-                    child: Center(child: Text('Error : ${state.errorMessage}')),
+                final HomeCubit cubit = context.read<HomeCubit>();
+                if (state.status is FormLoadingState) {
+                  return const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
                   );
-                } else if (state is HomeGetProductsSuccessState) {
+                } else if (state.status is FormFailureState) {
+                  final errorMessage =
+                      (state.status as FormFailureState).message;
+                  return Expanded(
+                    child: Center(child: Text('Error : $errorMessage')),
+                  );
+                } else if (state.status is FormGetProductsSuccess) {
                   if (state.products.isEmpty) {
                     return Expanded(
                       child: Center(child: Text(StringManager.noProductsFound)),
@@ -103,7 +105,9 @@ class HomePage extends StatelessWidget {
                   return Expanded(
                     child: GridView.builder(
                       padding: const EdgeInsets.all(16),
-                      itemCount: state.products.length,
+                      itemCount: (state.status as FormGetProductsSuccess)
+                          .products
+                          .length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10,
@@ -111,12 +115,13 @@ class HomePage extends StatelessWidget {
                         childAspectRatio: 0.7.w,
                       ),
                       itemBuilder: (context, index) {
+                        final product = (state.status as FormGetProductsSuccess)
+                            .products[index];
                         return ProductCardItem(
-                          product: state.products[index],
-                          onTapWishlist: () =>
-                              cubit.toggleWishlist(state.products[index]),
+                          product: product,
+                          onTapWishlist: () => cubit.toggleWishlist(product),
                           onPressed: () {
-                            final currentProduct = state.products[index];
+                            final currentProduct = product;
                             showDialog(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
@@ -144,10 +149,69 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return Expanded(
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
+                  return const SizedBox();
                 }
+
+                // if (state is FormFailureState) {
+                //   final errorMessage =
+                //       (state.status as FormFailureState).message;
+                //   return Expanded(
+                //     child: Center(child: Text('Error : $errorMessage')),
+                //   );
+                // } else if (state is FormGetProductsSuccess) {
+                //   if (state.products.isEmpty) {
+                //     return Expanded(
+                //       child: Center(child: Text(StringManager.noProductsFound)),
+                //     );
+                //   }
+                //   return Expanded(
+                //     child: GridView.builder(
+                //       padding: const EdgeInsets.all(16),
+                //       itemCount: state.products.length,
+                //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //         crossAxisCount: 2,
+                //         mainAxisSpacing: 10,
+                //         crossAxisSpacing: 10,
+                //         childAspectRatio: 0.7.w,
+                //       ),
+                //       itemBuilder: (context, index) {
+                //         return ProductCardItem(
+                //           product: state.products[index],
+                //           onTapWishlist: () =>
+                //               cubit.toggleWishlist(state.products[index]),
+                //           onPressed: () {
+                //             final currentProduct = state.products[index];
+                //             showDialog(
+                //               context: context,
+                //               builder: (dialogContext) => AlertDialog(
+                //                 shape: RoundedRectangleBorder(
+                //                   borderRadius: AppRadius.card,
+                //                 ),
+                //                 content: SizedBox(
+                //                   width:
+                //                       MediaQuery.of(context).size.width * 0.9,
+                //                   child: SingleChildScrollView(
+                //                     child: ProductDetailsDialogContent(
+                //                       product: currentProduct,
+                //                       onTapAddToCart: () {
+                //                         cubit.addToCart(currentProduct);
+                //                         Navigator.of(dialogContext).pop();
+                //                       },
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //             );
+                //           },
+                //         );
+                //       },
+                //     ),
+                //   );
+                // } else {
+                //   return Expanded(
+                //     child: const Center(child: CircularProgressIndicator()),
+                //   );
+                // }
               },
             ),
           ],

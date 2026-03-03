@@ -15,10 +15,10 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeStates>(
+    return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final HomeCubit cubit = HomeCubit.get(context);
-        if (cubit.cartList.isEmpty) {
+        final HomeCubit cubit = context.read<HomeCubit>();
+        if (state.cartList.isEmpty) {
           return const Center(child: Text("No Cart List"));
         }
         return Column(
@@ -26,19 +26,19 @@ class CartPage extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.all(12.w),
-                itemCount: cubit.cartList.length,
+                itemCount: state.cartList.length,
                 separatorBuilder: (_, _) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) => CartItem(
-                  product: cubit.cartList[index],
+                  product: state.cartList[index],
                   deleteOnPressed: () =>
-                      cubit.deleteCartlist(cubit.cartList[index].id),
+                      cubit.deleteCartlist(state.cartList[index].id),
                   addQuantityOnPressed: () => cubit.updateQuantityInCart(
-                    productId: cubit.cartList[index].id,
-                    quantity: cubit.cartList[index].quantity,
+                    productId: state.cartList[index].id,
+                    quantity: state.cartList[index].quantity,
                   ),
                   removeQuantityOnPressed: () => cubit.updateQuantityInCart(
-                    productId: cubit.cartList[index].id,
-                    quantity: cubit.cartList[index].quantity,
+                    productId: state.cartList[index].id,
+                    quantity: state.cartList[index].quantity,
                     addQuantity: false,
                   ),
                 ),
@@ -49,10 +49,10 @@ class CartPage extends StatelessWidget {
                 child: Column(
                   children: [
                     OrderSummary(
-                      discount: cubit.cartModel.discount,
-                      subtotal: cubit.cartModel.subtotal,
-                      tax: cubit.cartModel.tax,
-                      total: cubit.cartModel.total,
+                      discount: state.cartModel.discount,
+                      subtotal: state.cartModel.subtotal,
+                      tax: state.cartModel.tax,
+                      total: state.cartModel.total,
                     ),
                     BottomButton(
                       text: "Clear Cart",
@@ -65,8 +65,8 @@ class CartPage extends StatelessWidget {
                         context,
                         Routes.checkoutRoute,
                         arguments: CheckoutArguments(
-                          totalPrice: cubit.cartModel.total,
-                          cartList: cubit.cartList,
+                          totalPrice: state.cartModel.total,
+                          cartList: state.cartList,
                           userModel: userModel,
                         ),
                       ),
